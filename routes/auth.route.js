@@ -100,13 +100,14 @@ router.post('/forgot-password', async function(req, res){
 
       //const _account = await Account.findOne({user_id: user_id});
       const _user = await User.findOne({ username: req.body.username, email: req.body.email });
+      console.log("\n1 nè: " + _user.fullname);
       if(!_user)
       {
         return res.status(400).send({
           message: `Không tồn tại người dùng thỏa username và email vừa nhập`
         });
       }
-
+      console.log("\n2 nè: " + _user.fullname);
       const code = Math.floor(Math.random() * 999999) + 100000;
       let id = _user.user_id;
       let email = _user.email;
@@ -119,7 +120,8 @@ router.post('/forgot-password', async function(req, res){
           pass: "infymt6620",
         },
       });
-
+      console.log("\n3 nè: " + transporter);
+      console.log("\n");
       var mainOptions = {
         // thiết lập đối tượng, nội dung gửi mail
         from: "secondwebnc2020@gmail.com",
@@ -137,13 +139,15 @@ router.post('/forgot-password', async function(req, res){
                       Trân trọng
                   </div>`,
       };
-
+      console.log("\n4 nè");
       transporter.sendMail(mainOptions, function (error, info) {
         if (error) {
+          console.log("\n5 nè\n");
           res
             .status(500)
-            .send({ status: "ERROR", message: "Không thể gửi message. " + error });
+            .send({ status: "ERROR", message: error });
         } else {
+          console.log("\n6 nè\n");
           const time = moment().valueOf();
           // Lưu OTP vào CSDL
           const _body = {
