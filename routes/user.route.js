@@ -22,6 +22,8 @@ router.post("/create", async function (req, res) {
             role : 2,
             created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
     });
+    newUser.save(function (err) {if (err) {return res.status(500).send(err.message);}});
+
     return res.status(201).send(newUser);
     // newUser.save((err, ret) => {
     //     if (err) {
