@@ -54,7 +54,7 @@ router.get("/", async function(req, res){
   const {user_id} = req.tokenPayload;
 
    try{
-     const list = ListReceiver.find({user_id: user_id});
+     const list = await ListReceiver.find({user_id: user_id});
      return res.status(200).send(list);
    }catch(err){
       return res.status(500).send(err.message);
