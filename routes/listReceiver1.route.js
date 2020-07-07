@@ -34,7 +34,7 @@ router.post("/", async function(req, res){
                 remind_name: req.body.remind_name
               }
 
-              let newList1 = ListReceiver(newReceiver);
+              let newList1 = ListReceiver(newReceiver1);
               const ret1 = await newList1.save();
 
               return res.status(201).send({message : "thêm thành công"});
