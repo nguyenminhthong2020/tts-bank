@@ -42,7 +42,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(limiter);
 
-console.log("\n"+process.env.MONGODB_URI+"\n");
+console.log("\nThis is URI: \n"+process.env.MONGODB_URI+"\n");
+
 (async () => {
   try {
     const dbInfo = await db.connectDB(process.env.MONGODB_URI);
