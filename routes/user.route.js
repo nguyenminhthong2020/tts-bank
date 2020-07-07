@@ -23,8 +23,10 @@ router.post("/create", async function (req, res) {
             created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
     });
     newUser.save(function (err, _user) {
-        if (err) {return res.status(500).send(err.message);}
-        return res.status(201).send(_user);
+        // if (err) {return res.status(500).send(err.message);}
+        if(err){console.log("error")};
+        console.log("ok");
+        // return res.status(201).send(_user);
    });
 
     
