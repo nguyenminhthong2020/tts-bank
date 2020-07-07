@@ -93,7 +93,7 @@ router.post("/delete", async function(req, res){
       user_id: user_id,
       receiver_account_number: req.body.receiver_account_number
    });
-      
+      return res.status(200).send({message:"đã xóa"});
    }catch(err){
       return res.status(500).send(err.message);
    }
