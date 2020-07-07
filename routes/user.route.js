@@ -26,26 +26,26 @@ router.post("/create", async function (req, res) {
             return res.status(500).send(err.message);
         }
         else {
-            const newAccount = new Account({
-                account_number: 12020 + ret.user_id,
-                user_id: ret.user_id,
-                balance: 0,
-                status: 1,
-                created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
-            });
+            // const newAccount = new Account({
+            //     account_number: 12020 + ret.user_id,
+            //     user_id: ret.user_id,
+            //     balance: 0,
+            //     status: 1,
+            //     created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
+            // });
             
-            newAccount.save((err, ret1) => {
-                if(err){
-                    return res.status(500).send(err.message);
-                }else{
-                    return res.status(201).send({
-                                message: "Tạo thành công",
-                                username: ret.username,
-                                account_number: ret1.account_number
-                            }); 
-                }
-            })
-            // return response.status(200).json({ message: 'Thêm nhiệm vụ mới thành công' });
+            // newAccount.save((err, ret1) => {
+            //     if(err){
+            //         return res.status(500).send(err.message);
+            //     }else{
+            //         return res.status(201).send({
+            //                     message: "Tạo thành công",
+            //                     username: ret.username,
+            //                     account_number: ret1.account_number
+            //                 }); 
+            //     }
+            // })
+             return response.status(200).json({ message: 'Thêm nhiệm vụ mới thành công' });
         }
     });
     // try{
