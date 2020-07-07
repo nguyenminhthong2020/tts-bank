@@ -193,7 +193,7 @@ router.post("/forgot-password/confirm", async function(req, res){
             .status(404)
             .send({ status_code: "NO_OTP", message: "Không tìm thấy otp" });
         } else {
-          if (time - _otp.time > process.env.OTP_EXPIRE) {
+          if (time - _otp.time > config.auth.expireTime) {
             return res
               .status(400)
               .send({ status_code: "TIME_EXPIRE", message: "Otp hết hạn." });

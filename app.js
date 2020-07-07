@@ -26,7 +26,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 require('./utils/db');
 
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes 
     max: 100 // limit each IP to 100 requests per windowMs
@@ -80,7 +80,7 @@ app.use(function (err, req, res, next) {        // default error-handler
       }
 })
 
-app.listen(PORT,()=>{
+app.listen(port,()=>{
     console.log(`API is running at http://localhost:${PORT}`)
 })
 

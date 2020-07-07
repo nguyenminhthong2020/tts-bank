@@ -213,7 +213,7 @@ router.post("/recharge", async function (req, res) {
           sender_account_number: req.body.sender_account_number,
           receiver_account_number: req.body.receive_account_number,
           sender_bank_code: req.get("partnerCode"),
-          receive_bank_code: process.env.CODE,  // "GO"    
+          receive_bank_code: config.auth.bankcode,  // "GO"    
           money: money1,
           transaction_fee: 0, 
           type_fee: req.body.type_fee,    // 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
