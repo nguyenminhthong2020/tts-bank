@@ -42,16 +42,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(limiter);
 
-console.log("\nThis is URI: \n"+process.env.MONGODB_URI+"\n");
+//console.log("\nThis is URI: \n"+process.env.MONGODB_URI+"\n");
 
 (async () => {
   try {
     const dbInfo = await db.connectDB(process.env.MONGODB_URI);
     if (dbInfo) {
-      console.log(`Connected to MongoDB successfully ${dbInfo.connection.host}`)
+      console.log(`\nConnected to MongoDB successfully ${dbInfo.connection.host}`)
     }
   } catch (error) {
-    console.log(`Connected to DB failed ${error}`)
+    console.log(`\nConnected to DB failed ${error}`)
   }
 })();
 
