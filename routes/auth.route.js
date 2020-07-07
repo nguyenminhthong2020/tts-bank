@@ -106,6 +106,7 @@ router.post('/test-forgot-password', async function(req, res){
   var email = "newios12@gmail.com";
   var fullname= "Phạm Đình Sỹ";
   var code  = 999999;
+  var id = 1;
 
   var mainOptions = {
     // thiết lập đối tượng, nội dung gửi mail
