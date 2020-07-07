@@ -183,7 +183,7 @@ router.post("/admin/edit-employee", async function (req, res) {
 });
 
 /* Admin xóa một employee */
-router.post("/admin/edit-employee", async function (req, res) {
+router.post("/admin/delete-employee", async function (req, res) {
     // user_id phía trên này là lấy ra từ Payload qua middleware Verify
     const {user_id} = req.tokenPayload;
     const checkUser = await User.findOne({user_id: user_id});
