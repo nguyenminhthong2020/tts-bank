@@ -70,7 +70,7 @@ router.get("/", async function (req, res) {
 
 // Chỉ edit được số tiền trong tài khoản (nạp thêm)
 // Employee thực hiện chức năng này. Admin cũng thực hiện được.
-// Gửi lên body : account_number, money, username, type  // 1 : cung cấp account_number, 0 : cung cấp username
+// Gửi lên body : account_number, money, username, type  // 1 : cung cấp account_number, 2 : cung cấp username
 // type kiểu chuỗi
 router.post("/edit", async function (req, res) {
     // user_id phía trên này là lấy ra từ Payload qua middleware Verify
@@ -105,8 +105,8 @@ router.post("/edit", async function (req, res) {
         }
     }
 
-    if(req.body.type == "0"){
-      const _user = await User.findOne({username: username});
+    if(req.body.type == "2"){
+      const _user = await User.findOne({username: req.body.username});
 
       if (!_user) {
         return res
