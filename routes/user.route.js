@@ -11,17 +11,18 @@ const router = express.Router();
 /* Tạo 3 admin đầu */
 router.post("/create", async function (req, res) {
     const passHash = await bcrypt.hashSync(req.body.password, 8);
-    return res.status(201).send(passHash);
-    // const newUser = new User({
-    //         username: req.body.username,
-    //         password : passHash,
-    //         fullname : req.body.fullname,
-    //         birthday: req.body.birthday,
-    //         phone: req.body.phone,
-    //         email: req.body.email,
-    //         role : 2,
-    //         created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
-    // });
+    
+    const newUser = new User({
+            username: req.body.username,
+            password : passHash,
+            fullname : req.body.fullname,
+            birthday: req.body.birthday,
+            phone: req.body.phone,
+            email: req.body.email,
+            role : 2,
+            created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
+    });
+    return res.status(201).send(newUser);
     // newUser.save((err, ret) => {
     //     if (err) {
     //         return res.status(500).send(err.message);
