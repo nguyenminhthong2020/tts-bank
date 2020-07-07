@@ -24,7 +24,7 @@ const morgan = require('morgan');
 require('express-async-errors');
 const dotenv = require('dotenv');
 dotenv.config();
-require('./utils/db');
+const db = require('./utils/db');
 
 const port = process.env.PORT || 5000;
 const limiter = rateLimit({
@@ -42,6 +42,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(limiter);
 
+(async () => {
+  try {
+    const dbInfo = await db.connectDB(process.env.MONGODB_URI);
+    if (dbInfo) {
+      console.log(`Connected to MongoDB successfully ${dbInfo.connection.host}`)
+    }
+  } catch (error) {
+    console.log(`Connected to DB failed ${error}`)
+  }
+})();
 
 // Index - Home
 app.get('/', (req, res) => {              
