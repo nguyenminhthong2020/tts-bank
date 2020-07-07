@@ -51,7 +51,7 @@ router.get('/debt', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
 
     try{
@@ -74,7 +74,7 @@ router.get('/receive', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -94,7 +94,7 @@ router.get('/send', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -114,7 +114,7 @@ router.get('/debt', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -135,7 +135,7 @@ router.post('/admin', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role < 2) {
-      return res.status(400).send("Bạn không đủ thẩm quyền.");
+      return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     if(req.body.bank_code === "All")

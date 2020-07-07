@@ -104,7 +104,7 @@ router.post("/admin/create-employee", async function (req, res) {
     const {user_id} = req.tokenPayload;
     const checkUser = await User.findOne({user_id: user_id});
     if(checkUser.role < 2){
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -150,7 +150,7 @@ router.get("/admin/list-employee", async function (req, res) {
     const {user_id} = req.tokenPayload;
     const checkUser = await User.findOne({user_id: user_id});
     if(checkUser.role < 2){
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -167,7 +167,7 @@ router.post("/admin/edit-employee", async function (req, res) {
     const {user_id} = req.tokenPayload;
     const checkUser = await User.findOne({user_id: user_id});
     if(checkUser.role < 2){
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -188,7 +188,7 @@ router.post("/admin/delete-employee", async function (req, res) {
     const {user_id} = req.tokenPayload;
     const checkUser = await User.findOne({user_id: user_id});
     if(checkUser.role < 2){
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
@@ -206,7 +206,7 @@ router.post("/employee/create-customer", async function (req, res) {
     const {user_id} = req.tokenPayload;
     const checkUser = await User.findOne({user_id: user_id});
     if(checkUser.role == 0){
-        return res.status(400).send("Bạn không đủ thẩm quyền.");
+        return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
     }
     
     try{
