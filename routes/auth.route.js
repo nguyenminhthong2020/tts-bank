@@ -94,79 +94,18 @@ router.post('/refresh', async (req, res) => {
 });
 
 
-router.post('/test-forgot-password', async function(req, res){
-  var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "secondwebnc2020@gmail.com",
-      pass: "infymt6620",
-    },
-  });
- 
-  var email = "newios12@gmail.com";
-  var fullname= "Phạm Đình Sỹ";
-  var code  = 999999;
-  var id = 1;
-
-  var mainOptions = {
-    // thiết lập đối tượng, nội dung gửi mail
-    from: "secondwebnc2020@gmail.com",
-    to: email,
-    subject: "[Xác nhận OTP]",
-    text: "Tin nhắn từ ngân hàng Go ",
-    html: `<div>
-                  Xin chào ${fullname},
-                  <br><br>
-                  Vừa có một thông báo quên mật khẩu từ bạn ở ngân hàng chúng tôi. <br>
-                  Dưới đây là mã OTP có thời hạn 10 phút : <br>
-                  <h2>${code}</h2><br>
-                  Nếu người yêu cầu không phải bạn, xin bỏ qua email này.
-                  <br><br>
-                  Trân trọng
-              </div>`,
-  };
- 
-  transporter.sendMail(mainOptions, function (error, info) {
-    if (error) {
-      res
-        .status(500)
-        .send({ status: "ERROR", message: error });
-    } else {
-      const time = moment().valueOf();
-      // Lưu OTP vào CSDL
-      const _body = {
-        user_id: id,
-        email: email,
-        code: code,
-        time: time,
-        message: "Quên mật khẩu"
-      };
-      // let newOtp = Otp( _body);
-      // const ret = await newOtp.save();
-      return res
-            .status(200)
-            .send({
-              status: "OK",
-              message:"Đã gửi mail"
-              }
-            );
-    }
-});
-})
 // Quên mật khẩu 
 // body gửi lên có username và email
 router.post('/forgot-password', async function(req, res){
-
       //const _account = await Account.findOne({user_id: user_id});
       const _user = await User.findOne({ username: req.body.username, email: req.body.email });
- 
       if(!_user)
       {
         return res.status(400).send({
           message: `Không tồn tại người dùng thỏa username và email vừa nhập`
         });
       }
-      
+
       const code = Math.floor(Math.random() * 999999) + 100000;
       let id = _user.user_id;
       let email = _user.email;
@@ -179,11 +118,11 @@ router.post('/forgot-password', async function(req, res){
           pass: "infymt6620",
         },
       });
-     
+
       var mainOptions = {
         // thiết lập đối tượng, nội dung gửi mail
         from: "secondwebnc2020@gmail.com",
-        to: req.body.email,
+        to: email,
         subject: "[Xác nhận OTP]",
         text: "Tin nhắn từ ngân hàng Go ",
         html: `<div>
@@ -197,12 +136,12 @@ router.post('/forgot-password', async function(req, res){
                       Trân trọng
                   </div>`,
       };
-     
+
       transporter.sendMail(mainOptions, function (error, info) {
         if (error) {
           res
             .status(500)
-            .send({ status: "ERROR", message: error });
+            .send({ status: "ERROR", message: "Không thể gửi message. " + error });
         } else {
           const time = moment().valueOf();
           // Lưu OTP vào CSDL
@@ -215,25 +154,19 @@ router.post('/forgot-password', async function(req, res){
           };
           // let newOtp = Otp( _body);
           // const ret = await newOtp.save();
-          return res
+
+          Otp.create(_body, async (err, result) => {
+            if (err) {
+              return res.status(500).send({ status: "ERROR", message: err });
+            } else {
+              return res
                 .status(200)
                 .send({
-                  status: "OK"
-                  }
-                );
-
-          // Otp.create(_body, async (err, result) => {
-          //   if (err) {
-          //     return res.status(500).send({ status: "ERROR", message: err });
-          //   } else {
-          //     return res
-          //       .status(200)
-          //       .send({
-          //         status: "OK",
-          //         data: { otp_id: result.otp_id, email: result.email, time: result.time },
-          //       });
-          //   }
-          // });
+                  status: "OK",
+                  data: { otp_id: result.otp_id, email: result.email, time: result.time },
+                });
+            }
+          });
         }
     });
 });
