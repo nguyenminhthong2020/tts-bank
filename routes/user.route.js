@@ -10,26 +10,28 @@ const router = express.Router();
 
 /* Tạo 3 admin đầu */
 router.post("/create", async function (req, res) {
-    const passHash = await bcrypt.hashSync(req.body.password, 8);
+    const ret = await User.findOne({user_id: 1});
+    return res.status(200).send(ret);
+//     const passHash = await bcrypt.hashSync(req.body.password, 8);
     
-    const newUser = new User({
-            username: req.body.username,
-            password : passHash,
-            fullname : req.body.fullname,
-            birthday: req.body.birthday,
-            phone: req.body.phone,
-            email: req.body.email,
-            role : 2,
-            created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
-    });
-    console.log("1");
-    newUser.save(function (err, _user) {
-        // if (err) {return res.status(500).send(err.message);}
-        if(err){console.log("2")};
-        console.log("3");
-        // return res.status(201).send(_user);
-   });
-   console.log("4");
+//     const newUser = new User({
+//             username: req.body.username,
+//             password : passHash,
+//             fullname : req.body.fullname,
+//             birthday: req.body.birthday,
+//             phone: req.body.phone,
+//             email: req.body.email,
+//             role : 2,
+//             created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
+//     });
+//     console.log("1");
+//     newUser.save(function (err, _user) {
+//         // if (err) {return res.status(500).send(err.message);}
+//         if(err){console.log("2")};
+//         console.log("3");
+//         // return res.status(201).send(_user);
+//    });
+//    console.log("4");
     
     // newUser.save((err, ret) => {
     //     if (err) {
