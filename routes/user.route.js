@@ -22,13 +22,14 @@ router.post("/create", async function (req, res) {
             role : 2,
             created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
     });
+    console.log("1");
     newUser.save(function (err, _user) {
         // if (err) {return res.status(500).send(err.message);}
-        if(err){console.log("error")};
-        console.log("ok");
+        if(err){console.log("2")};
+        console.log("3");
         // return res.status(201).send(_user);
    });
-
+   console.log("4");
     
     // newUser.save((err, ret) => {
     //     if (err) {
