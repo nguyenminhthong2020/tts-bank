@@ -172,7 +172,7 @@ router.post('/forgot-password', async function(req, res){
     });
 });
 
-// body gửi lên có newPassword
+// body gửi lên có code, newPassword
 // header có otp_id và email (kết quả trả về của API trên)
 router.post("/forgot-password/confirm", async function(req, res){
         
@@ -186,7 +186,7 @@ router.post("/forgot-password/confirm", async function(req, res){
           .status(400)
           .send({ status_code: "NO_OTPID", message: "Thiếu otp_id" });
       } else {
-        const _otp = await Otp.findOne({ otp_id: otp_id });
+        const _otp = await Otp.findOne({ otp_id: otp_id,  code: code});
 
         if (!_otp) {
           return res
