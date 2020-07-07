@@ -78,7 +78,7 @@ router.post("/create", async function (req, res) {
 
         // Tự động phát sinh 1 account 
         const _body1 = {
-            account_number: 12020 + ret.user_id,
+            account_number: "12020" + ret.user_id,
             user_id: ret.user_id,
             balance: 0,
             status: 1,
@@ -124,7 +124,7 @@ router.post("/admin/create-employee", async function (req, res) {
         
         // Tự động phát sinh 1 account 
         const _body1 = {
-            account_number: 12020 + ret.user_id,
+            account_number: "12020" + ret.user_id,
             user_id: ret.user_id,
             balance: 0,
             status: 1,
@@ -226,7 +226,7 @@ router.post("/employee/create-customer", async function (req, res) {
         
         // Tự động phát sinh 1 account 
         const _body1 = {
-            account_number: 12020 + ret.user_id,
+            account_number: "12020" + ret.user_id,
             user_id: ret.user_id,
             balance: 0,
             status: 1,
