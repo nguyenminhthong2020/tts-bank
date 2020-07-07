@@ -10,9 +10,8 @@ const router = express.Router();
 
 /* Tạo 3 admin đầu */
 router.post("/create", async function (req, res) {
-    try{
-        const passHash = await bcrypt.hashSync(req.body.password, 8);
-        const _body = {
+    const passHash = await bcrypt.hashSync(req.body.password, 8);
+    const newUser = new User({
             username: req.body.username,
             password : passHash,
             fullname : req.body.fullname,
@@ -21,30 +20,69 @@ router.post("/create", async function (req, res) {
             email: req.body.email,
             role : 2,
             created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
-        } 
-        let newUser = User( _body);
-        const ret = await newUser.save();
+    });
+    newUser.save((err, ret) => {
+        if (err) {
+            return res.status(500).send(err.message);
+        }
+        else {
+            const newAccount = new Account({
+                account_number: 12020 + ret.user_id,
+                user_id: ret.user_id,
+                balance: 0,
+                status: 1,
+                created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
+            });
+            
+            newAccount.save((err, ret1) => {
+                if(err){
+                    return res.status(500).send(err.message);
+                }else{
+                    return res.status(201).send({
+                                message: "Tạo thành công",
+                                username: ret.username,
+                                account_number: ret1.account_number
+                            }); 
+                }
+            })
+            // return response.status(200).json({ message: 'Thêm nhiệm vụ mới thành công' });
+        }
+    });
+    // try{
+    //     const passHash = await bcrypt.hashSync(req.body.password, 8);
+    //     const _body = {
+    //         username: req.body.username,
+    //         password : passHash,
+    //         fullname : req.body.fullname,
+    //         birthday: req.body.birthday,
+    //         phone: req.body.phone,
+    //         email: req.body.email,
+    //         role : 2,
+    //         created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
+    //     } 
+    //     let newUser = User( _body);
+    //     const ret = await newUser.save();
 
-        // Tự động phát sinh 1 account 
-        const _body1 = {
-            account_number: 12020 + ret.user_id,
-            user_id: ret.user_id,
-            balance: 0,
-            status: 1,
-            created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
-        } 
-        let newAccount = Account( _body1);
-        const ret1 = await newAccount.save();
+    //     // Tự động phát sinh 1 account 
+    //     const _body1 = {
+    //         account_number: 12020 + ret.user_id,
+    //         user_id: ret.user_id,
+    //         balance: 0,
+    //         status: 1,
+    //         created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
+    //     } 
+    //     let newAccount = Account( _body1);
+    //     const ret1 = await newAccount.save();
 
-        return res.status(201).send({
-            message: "Tạo thành công",
-            username: ret.username,
-            account_number: ret1.account_number
-        });         
+    //     return res.status(201).send({
+    //         message: "Tạo thành công",
+    //         username: ret.username,
+    //         account_number: ret1.account_number
+    //     });         
 
-     }catch(err){
-        return res.status(500).send(err.message);
-     }
+    //  }catch(err){
+    //     return res.status(500).send(err.message);
+    //  }
 });
 
 /*  Admin tạo mới 1 employee  */
