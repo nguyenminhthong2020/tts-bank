@@ -156,19 +156,25 @@ router.post('/forgot-password', async function(req, res){
           };
           // let newOtp = Otp( _body);
           // const ret = await newOtp.save();
-
-          Otp.create(_body, async (err, result) => {
-            if (err) {
-              return res.status(500).send({ status: "ERROR", message: err });
-            } else {
-              return res
+          return res
                 .status(200)
                 .send({
-                  status: "OK",
-                  data: { otp_id: result.otp_id, email: result.email, time: result.time },
-                });
-            }
-          });
+                  status: "OK"
+                  }
+                );
+
+          // Otp.create(_body, async (err, result) => {
+          //   if (err) {
+          //     return res.status(500).send({ status: "ERROR", message: err });
+          //   } else {
+          //     return res
+          //       .status(200)
+          //       .send({
+          //         status: "OK",
+          //         data: { otp_id: result.otp_id, email: result.email, time: result.time },
+          //       });
+          //   }
+          // });
         }
     });
 });
