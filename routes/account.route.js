@@ -51,8 +51,13 @@ router.get("/:account_number", async function (req, res) {
     if(_account){
       const _user = await User.findOne({user_id: _account.user_id});
       return res.status(200).send({
+         "status": "OK",
          "fullname": _user.fullname
       });
+    }else{
+      return res.status(200).send({
+        "status": "NO_ACCOUNT"
+     });
     }
       
   } catch (err) {
