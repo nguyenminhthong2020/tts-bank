@@ -138,7 +138,7 @@ router.post("/internal/remind_name", async function (req, res) {
               </div>`,
   };
 
-  transporter.sendMail(mainOptions, function (error, info) {
+  transporter.sendMail(mainOptions, async function (error, info) {
     if (error) {
       res
         .status(500)
@@ -401,7 +401,7 @@ router.post("/external/remind_name", async function (req, res) {
               </div>`,
   };
 
-  transporter.sendMail(mainOptions, function (error, info) {
+  transporter.sendMail(mainOptions, async function (error, info) {
     if (error) {
       res
         .status(500)
