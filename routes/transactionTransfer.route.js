@@ -504,13 +504,16 @@ router.post("/external/confirm", async function (req, res) {
 
           if(_otp.receive_bank_code == "25Bank"){
             const str = process1.partnerRSA.RSA_PUBLICKEY;
-          
+            const strPri = process1.ourkey.RSA_PRIVATEKEY;
+
             var DestinationAccountNumber = parseInt(_otp.receiver_account_number);
             var SourceAccountNumber = parseInt(_otp.sender_account_number);
              
             const _user = await User.findOne({user_id: user_id});
   
             const key = new NodeRSA(str);
+            const key1 = new NodeRSA(strPri);
+
             const t = moment().valueOf();
             const text = {
               BankName: "GO",
@@ -522,7 +525,7 @@ router.post("/external/confirm", async function (req, res) {
               iat: t,
             };
             const encrypted = key.encrypt(text, "base64");
-            const signature = key.sign(text, 'base64');
+            const signature = key1.sign(text, 'base64');
   
             const url = "https://bank25.herokuapp.com/api/partner/account-bank/recharge";
    
