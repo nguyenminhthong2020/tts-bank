@@ -107,7 +107,7 @@ router.post("/check", async (req, res) => {
     
         //add PartnerViewLog
       var entityUpdateLog1 = {
-          bank_code: partnerCode1,
+          partner_code: partnerCode1,
           account_number: req.body.account_number,
           created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString(),
         };
