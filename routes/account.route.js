@@ -24,11 +24,11 @@ router.get("/", async function (req, res) {
 });
 router.get("/all", async function (req, res) {
   const { user_id } = req.tokenPayload;
-  //const checkUser = await User.findOne({user_id: user_id});
+  const checkUser = await User.findOne({user_id: user_id});
 
-  // if(checkUser.role == 0){
-  //     res.status(400).send("Bạn không đủ thẩm quyền.");
-  // }
+  if(checkUser.role == 0){
+      res.status(400).send("Bạn không đủ thẩm quyền.");
+  }
   try {
     const rows = await Account.find();
     return res.status(200).send({
@@ -47,10 +47,14 @@ router.get("/:account_number", async function (req, res) {
   //     res.status(400).send("Bạn không đủ thẩm quyền.");
   // }
   try {
-    const rows = await Account.findOne({ account_number: req.params.account_number });
+    const _account = await Account.findOne({ account_number: req.params.account_number });
+    if(acc){
+      const fullname = await User.findOne({user_id: _account.user_id});
       return res.status(200).send({
-        rows
+        fullname
       });
+    }
+      
   } catch (err) {
     return res.status(500).send(err.message);
   }
