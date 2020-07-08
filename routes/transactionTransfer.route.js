@@ -236,14 +236,14 @@ router.post("/internal/confirm", async function (req, res) {
               message: "Gửi tiền thất bại vì số tiền gửi vượt quá số dư tài khoản đang có",
             });
         } else {
-          
+           console.log("\n1 nè");
             try{
                 const accountReceive = await Account.findOne({
                   account_number: _otp.receiver_account_number,
                 });
-      
+                console.log("\n2 nè");
                 let balance2 = accountReceive.balance;
-      
+                console.log("\n3 nè");
                 const ret1 = await Account.findOneAndUpdate(
                   {
                     account_number: _otp.sender_account_number,
@@ -252,7 +252,7 @@ router.post("/internal/confirm", async function (req, res) {
                     balance: balance1 - _otp.money,
                   }
                 );
-      
+                console.log("\n4 nè");
                 const ret2 = await Account.findOneAndUpdate(
                   {
                     account_number: _otp.receiver_account_number,
@@ -261,7 +261,7 @@ router.post("/internal/confirm", async function (req, res) {
                     balance: balance2 + _otp.money,
                   }
                 );
-      
+                console.log("\n5 nè");
                 // Update Transaction Model
                 const _body1 = {
                   sender_account_number: _otp.sender_account_number,
@@ -274,10 +274,10 @@ router.post("/internal/confirm", async function (req, res) {
                   message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
                   created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
                 };
-      
+                console.log("\n6 nè");
                 let newTransaction = Transaction(_body1);
                 const ret3 = await newTransaction.save();
-
+                console.log("\n7 nè");
                 return res.status(200).send({ status: "TRANSFERD", message: "Cập nhật thành công." });
             }catch(err){
                 
