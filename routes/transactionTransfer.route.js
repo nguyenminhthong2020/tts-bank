@@ -501,69 +501,73 @@ router.post("/external/confirm", async function (req, res) {
               message: "Số tiền gửi vượt quá số dư tài khoản đang có",
             });
         } else {
-          const str = process1.partnerRSA.RSA_PUBLICKEY;
+
+          if(_otp.receive_bank_code == "25Bank"){
+            const str = process1.partnerRSA.RSA_PUBLICKEY;
           
-          var DestinationAccountNumber = parseInt(_otp.receiver_account_number);
-          var SourceAccountNumber = parseInt(_otp.sender_account_number);
-           
-          const _user = await User.findOne({user_id: user_id});
-
-          const key = new NodeRSA(str);
-          const t = moment().valueOf();
-          const text = {
-            BankName: "GO",
-            DestinationAccountNumber: DestinationAccountNumber,     
-            SourceAccountName: _user.fullname,
-            SourceAccountNumber: SourceAccountNumber,
-            Amount: _otp.money,
-            Message: _otp.message,
-            iat: t,
-          };
-          const encrypted = key.encrypt(text, "base64");
-          const signature = key.sign(text, 'base64');
-
-          const url = "https://bank25.herokuapp.com/api/partner/account-bank/recharge";
- 
-          axios
-            .post(url, {
-              data: {
-                "Encrypted": encrypted,
-                "Signed": signature
-              },
-            }).then(async (response) => {
-              let reply = response.data.reply;
-              
-              const ret4 = await Account.findOneAndUpdate(
-                {
-                  account_number: _otp.sender_account_number,
+            var DestinationAccountNumber = parseInt(_otp.receiver_account_number);
+            var SourceAccountNumber = parseInt(_otp.sender_account_number);
+             
+            const _user = await User.findOne({user_id: user_id});
+  
+            const key = new NodeRSA(str);
+            const t = moment().valueOf();
+            const text = {
+              BankName: "GO",
+              DestinationAccountNumber: DestinationAccountNumber,     
+              SourceAccountName: _user.fullname,
+              SourceAccountNumber: SourceAccountNumber,
+              Amount: _otp.money,
+              Message: _otp.message,
+              iat: t,
+            };
+            const encrypted = key.encrypt(text, "base64");
+            const signature = key.sign(text, 'base64');
+  
+            const url = "https://bank25.herokuapp.com/api/partner/account-bank/recharge";
+   
+            axios
+              .post(url, {
+                data: {
+                  "Encrypted": encrypted,
+                  "Signed": signature
                 },
-                {
-                  balance: balance1 - _otp.money,
-                }
-              );
-              
-                  // Update Transaction Model
-              const _body1 = {
-                sender_account_number: _otp.sender_account_number,
-                receiver_account_number: _otp.receiver_account_number,
-                sender_bank_code: _otp.sender_bank_code,
-                receive_bank_code: _otp.receive_bank_code,
-                money: _otp.money,
-                transaction_fee: _otp.transaction_fee,
-                type_fee: _otp.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
-                message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
-                created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
-              };
-
-              let newTransaction = Transaction(_body1);
-              const ret5 = await newTransaction.save();
-
-              return res.status(200).send({status: "OK", message: reply});
-              
-            }).catch((error) => {
-              const str_response = JSON.stringify(error.response.data);
-              return res.status(500).send({status: "ERROR", message: str_response});
-            });
+              }).then(async (response) => {
+                let reply = response.data.reply;
+                
+                const ret4 = await Account.findOneAndUpdate(
+                  {
+                    account_number: _otp.sender_account_number,
+                  },
+                  {
+                    balance: balance1 - _otp.money,
+                  }
+                );
+                
+                    // Update Transaction Model
+                const _body1 = {
+                  sender_account_number: _otp.sender_account_number,
+                  receiver_account_number: _otp.receiver_account_number,
+                  sender_bank_code: _otp.sender_bank_code,
+                  receive_bank_code: _otp.receive_bank_code,
+                  money: _otp.money,
+                  transaction_fee: _otp.transaction_fee,
+                  type_fee: _otp.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
+                  message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
+                  created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
+                };
+  
+                let newTransaction = Transaction(_body1);
+                const ret5 = await newTransaction.save();
+  
+                return res.status(200).send({status: "OK", message: reply});
+                
+              }).catch((error) => {
+                const str_response = JSON.stringify(error.response.data);
+                return res.status(500).send({status: "ERROR", message: str_response});
+              });
+          }
+          
 
 
           
