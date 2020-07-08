@@ -22,6 +22,23 @@ router.get("/", async function (req, res) {
     return res.status(500).send(err.message);
   }
 });
+router.get("/all", async function (req, res) {
+  const { user_id } = req.tokenPayload;
+  //const checkUser = await User.findOne({user_id: user_id});
+
+  // if(checkUser.role == 0){
+  //     res.status(400).send("Bạn không đủ thẩm quyền.");
+  // }
+  try {
+    const rows = await Account.findOne({ user_id: user_id });
+    return res.status(200).send({
+        rows
+      });
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+});
+
 router.get("/:account_number", async function (req, res) {
   const { user_id } = req.tokenPayload;
   //const checkUser = await User.findOne({user_id: user_id});
