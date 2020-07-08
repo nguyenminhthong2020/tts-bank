@@ -3,14 +3,18 @@
    a) Danh sách người dùng:
 
    1 admin là admin với pass là 123
-   3 employee là nhanvien1, nhanvien2, nhanvien3
-   8 user là user1, user2,...user8
+   2 employee là employee1, employee2 với pass là 123
+   8 user là : (pass là 123)
+      newios12
+      s.pdboyth16
+      anhhuy742020
+      huyenbabe2012
+      phantuan060598
+      webnc2020
    
    b) Quy ước: mỗi account_number có dạng 12020 + user_id
 
    c) Quy ước: mỗi saving_account_number có dạng 
-
-   MONGODB_URL=mongodb+srv://secondwebnc2020:infymt6620@cluster0-me6ey.gcp.mongodb.net/internet_banking?retryWrites=true&w=majority
 
 */
 
