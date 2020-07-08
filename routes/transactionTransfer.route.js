@@ -281,7 +281,7 @@ router.post("/internal/confirm", async function (req, res) {
                 return res.status(200).send({ status: "TRANSFERD", message: "Cập nhật thành công." });
             }catch(err){
                 
-              return res.status(500).send({ status: "ERROR", message: "Cập nhật thất bại." });
+              return res.status(500).send({ status: "ERROR", message: "Cập nhật thất bại." + err});
             }
           
           
