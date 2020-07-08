@@ -90,27 +90,27 @@ router.post("/check", async (req, res) => {
         message: "Thiếu account_number.",
       });
     }
-
+    console.log("\n 1 ok nè");
     try {
       const userAccount = await Account.findOne({account_number: req.body.account_number});
-
+      console.log("\n 2 ok nè");
       if (!userAccount) {
         return res.status(404).send({
             message: `Không tìm thấy user có account number ${req.body.account_number}`,
           });
       }
-      
+      console.log("\n 3 ok nè");
       const userInformation = 
         await User.findOne({user_id: userAccount.user_id})
                   .select('fullname status');
-      
+      console.log("\n 4 ok nè");
         //add PartnerViewLog
       var entityUpdateLog1 = {
           bank_code: req.get("partnerCode"),
           account_number: req.body.account_number,
           created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString(),
         };
-
+        console.log("\n 5 ok nè");
       await PartnerViewLog.create(entityUpdateLog1);
 
       return res.status(200).send(userInformation);
