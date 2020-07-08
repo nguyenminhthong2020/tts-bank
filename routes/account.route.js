@@ -30,7 +30,7 @@ router.get("/all", async function (req, res) {
   //     res.status(400).send("Bạn không đủ thẩm quyền.");
   // }
   try {
-    const rows = await Account.findOne({ user_id: user_id });
+    const rows = await Account.find();
     return res.status(200).send({
         rows
       });
