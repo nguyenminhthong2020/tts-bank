@@ -42,7 +42,7 @@ const confirm = (req, type) => {
       hashSecretKey = md5(config.auth.secretPartnerForTestRSA);
     }
     const comparingSign = md5(ts + JSON.stringify(req.body) + hashSecretKey);
-
+    console.log("\n" + ts + "\n" + partnerCode + "\n" + sig + "\n" + comparingSign);
     if (sig != comparingSign) {
       return 3;
     }
