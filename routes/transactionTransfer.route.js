@@ -145,9 +145,7 @@ router.post("/internal/remind_name", async function (req, res) {
         .send({ status: "ERROR", message: "Không thể gửi message. " + error });
     } else {
       
-      const _receive = ListReceiver.findOne({user_id: user_id, remind_name: req.body.remind_name});
-      console.log("\nThis is (user_id) : " + _receive.user_id);
-      console.log("\nThis is : " + _receive.remind_name + ", " + _receive.receiver_account_number+"\n");
+      const _receive = await ListReceiver.findOne({user_id: user_id, remind_name: req.body.remind_name});
       const time = moment().valueOf();
       // Lưu OTP vào CSDL
       const _body = {
@@ -411,7 +409,7 @@ router.post("/external/remind_name", async function (req, res) {
     } else {
       //let receiver_account_number = (receiver_account_number1 == "") ? req.body.receiver_account_number2 : req.body.receiver_account_number1;
       
-      const _receive = ListReceiver.findOne({user_id: user_id, remind_name: req.body.remind_name});
+      const _receive = await ListReceiver.findOne({user_id: user_id, remind_name: req.body.remind_name});
 
       const time = moment().valueOf();
       // Lưu OTP vào CSDL
