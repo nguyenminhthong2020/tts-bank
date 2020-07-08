@@ -130,6 +130,7 @@ router.post("/check", async (req, res) => {
 router.post("/recharge", async function (req, res) {
     const partnerCode = req.get("partnerCode");
     const signature = req.get("signature"); 
+    const paCode = req.get("partnerCode");
 
     // Kiểm tra ngân hàng liên kết là RSA/ PGP hay ForTest để lấy keyPulic
     let partner;
@@ -211,15 +212,16 @@ router.post("/recharge", async function (req, res) {
       //add transactionHistory
 
       let money1 = +req.body.money || 0;
+      
       const entityUpdateLog = {
           sender_account_number: req.body.sender_account_number,
           receiver_account_number: req.body.receive_account_number,
-          sender_bank_code: req.get("partnerCode"),
+          sender_bank_code: paCode,
           receive_bank_code: config.auth.bankcode,  // "GO"    
           money: money1,
           transaction_fee: 0, 
           type_fee: req.body.type_fee,    // 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
-          message: String,                // Ví dụ: "gửi trả nợ cho ông A"
+          message: req.body.message,                // Ví dụ: "gửi trả nợ cho ông A"
           created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
       };
       await Transaction.create(entityUpdateLog);
