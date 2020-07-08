@@ -48,7 +48,7 @@ router.get("/:account_number", async function (req, res) {
   // }
   try {
     const _account = await Account.findOne({ account_number: req.params.account_number });
-    if(acc){
+    if(_account){
       const fullname = await User.findOne({user_id: _account.user_id});
       return res.status(200).send({
         fullname
