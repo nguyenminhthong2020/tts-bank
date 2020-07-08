@@ -146,7 +146,8 @@ router.post("/internal/remind_name", async function (req, res) {
     } else {
       
       const _receive = ListReceiver.findOne({user_id: user_id, remind_name: req.body.remind_name});
-
+      console.log("\nThis is (user_id) : " + _receive.user_id);
+      console.log("\nThis is : " + _receive.remind_name + ", " + _receive.receiver_account_number+"\n");
       const time = moment().valueOf();
       // Lưu OTP vào CSDL
       const _body = {
