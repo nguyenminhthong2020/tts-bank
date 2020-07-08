@@ -115,7 +115,7 @@ router.post("/check", async (req, res) => {
       let newU = PartnerViewLog( entityUpdateLog1);
         const ret = await newU.save();
 
-      return res.status(200).send(newU);
+      return res.status(200).send(userInformation);
 
     } catch (err) {
       console.log("error: ", err.message);
