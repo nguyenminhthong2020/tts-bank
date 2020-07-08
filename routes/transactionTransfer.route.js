@@ -337,7 +337,7 @@ router.post("/external/receiver_account_number", async function (req, res) {
         code: code,
         time: time,
         sender_account_number: _account.account_number,
-        receiver_account_number: req.body.receiver_account_number,
+        receiver_account_number: req.body.receiver_account_number+"",
         sender_bank_code: "GO",
         receive_bank_code: req.body.receive_bank_code,
         money: req.body.money,
