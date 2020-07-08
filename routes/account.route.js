@@ -136,7 +136,11 @@ router.post("/edit", async function (req, res) {
         );
       
         if (ret) {
-          return res.status(500).send({ status:"OK",ret });
+          const ret1 = await Account.findOne(
+            { account_number: req.body.account_number }
+          );
+
+          return res.status(500).send({ status:"OK",ret1 });
         } else {
           return res.status(500).send({ status: "FAIL" });
         }
@@ -163,7 +167,11 @@ router.post("/edit", async function (req, res) {
       );
     
       if (ret) {
-        return res.status(500).send({ status:"OK", ret });
+        const ret1 = await Account.findOne(
+          { user_id: _user.user_id }
+        );
+
+        return res.status(500).send({ status:"OK", ret1 });
       } else {
         return res.status(500).send({ status: "FAIL" });
       }
