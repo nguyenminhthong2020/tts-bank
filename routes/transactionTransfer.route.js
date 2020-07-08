@@ -197,7 +197,7 @@ router.post("/internal/confirm", async function (req, res) {
       .status(400)
       .send({ status_code: "NO_OTPID", message: "Thiếu otp_id" });
   } else {
-    const _otp = await Otp.findOne({ otp_id: otp_id, code: req.body.code});
+    const _otp = await Otp.findOne({ otp_id: _otp_id, code: req.body.code});
 
     if (!_otp) {
       return res
@@ -470,7 +470,7 @@ router.post("/external/confirm", async function (req, res) {
       .status(400)
       .send({ status_code: "NO_OTPID", message: "Thiếu otp_id" });
   } else {
-    const _otp = await Otp.findOne({ otp_id: otp_id , code: req.body.code});
+    const _otp = await Otp.findOne({ otp_id: _otp_id , code: req.body.code});
 
     if (!_otp) {
       return res
