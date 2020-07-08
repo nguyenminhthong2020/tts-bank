@@ -246,7 +246,7 @@ router.post("/employee/create-customer", async function (req, res) {
 });
 
 // Lấy Info - Profile cho user
-router.post("/profile", async function(req, res){
+router.get("/profile", async function(req, res){
     const {user_id} = req.tokenPayload;
     const _user = await User.findOne({user_id: user_id});
 
