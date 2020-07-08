@@ -255,7 +255,7 @@ router.post("/internal/confirm", async function (req, res) {
       
                 const ret2 = await Account.findOneAndUpdate(
                   {
-                    account_number: _otp.receive_bank_code,
+                    account_number: _otp.receiver_account_number,
                   },
                   {
                     balance: balance2 + _otp.money,
