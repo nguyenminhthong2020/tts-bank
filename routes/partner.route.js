@@ -66,6 +66,7 @@ const confirm = (req, type) => {
 
 // Partner truy vấn thông tin tài khoản
 router.post("/check", async (req, res) => {
+   const partnerCode1 = req.get("partnerCode");
     var con = confirm(req, 1);
     if (con == 1) {
       return res.status(400).send({
@@ -106,7 +107,7 @@ router.post("/check", async (req, res) => {
     
         //add PartnerViewLog
       var entityUpdateLog1 = {
-          bank_code: req.get("partnerCode"),
+          bank_code: partnerCode1,
           account_number: req.body.account_number,
           created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString(),
         };
