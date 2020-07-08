@@ -16,11 +16,12 @@ const process1 = require("../config/process.config");
 const router = express.Router();
 
 // Chuyển khoản nội bộ (cùng ngân hàng)
-// Người gửi nhập receiver_account_number
-router.post("/internal", async function (req, res) {
+// Body gửi lên có receiver_account_number, money, message, type_fee
+router.post("/internal/receiver_account_number", async function (req, res) {
   const { user_id } = req.tokenPayload;
 
-  //const _account = await Account.findOne({user_id: user_id});
+  const _account = await Account.findOne({user_id: user_id});
+
   const _user = await User.findOne({ user_id: user_id });
   const code = Math.floor(Math.random() * 999999) + 100000;
   let email = _user.email;
@@ -66,7 +67,7 @@ router.post("/internal", async function (req, res) {
         email: email,
         code: code,
         time: time,
-        sender_account_number: req.body.sender_account_number,
+        sender_account_number: _account.account_number,
         receiver_account_number: req.body.receiver_account_number,
         sender_bank_code: "GO",
         receive_bank_code: "GO",
@@ -86,7 +87,11 @@ router.post("/internal", async function (req, res) {
             .status(200)
             .send({
               status: "OK",
-              data: { otp_id: result.otp_id, email: result.email, time: result.time},
+              data: { 
+                otp_id: result.otp_id, 
+                email: result.email, 
+                time: result.time
+               },
             });
         }
       });
@@ -96,11 +101,12 @@ router.post("/internal", async function (req, res) {
 
 
 // Chuyển khoản nội bộ (cùng ngân hàng)
-// Người gửi gửi lên remind_name
-router.post("/internal", async function (req, res) {
+// Body gửi lên có remind_name, money, message, type_fee
+router.post("/internal/remind_name", async function (req, res) {
   const { user_id } = req.tokenPayload;
   
-  //const _account = await Account.findOne({user_id: user_id});
+  const _account = await Account.findOne({user_id: user_id});
+
   const _user = await User.findOne({ user_id: user_id });
   const code = Math.floor(Math.random() * 999999) + 100000;
   let email = _user.email;
@@ -148,7 +154,7 @@ router.post("/internal", async function (req, res) {
         email: email,
         code: code,
         time: time,
-        sender_account_number: req.body.sender_account_number,
+        sender_account_number: _account.account_number,
         receiver_account_number: _receive.receiver_account_number,
         sender_bank_code: "GO",
         receive_bank_code: "GO",
@@ -178,7 +184,7 @@ router.post("/internal", async function (req, res) {
 
 
 // Trong header có 2 trường là otp_id, email (chính là kết quả từ API phía trên)
-// Trong body có trường là otp (req.body.otp)
+// Trong body có trường là code (req.body.code)
 router.post("/internal/confirm", async function (req, res) {
   const time = moment().valueOf();
   const { user_id } = req.tokenPayload;
@@ -191,7 +197,7 @@ router.post("/internal/confirm", async function (req, res) {
       .status(400)
       .send({ status_code: "NO_OTPID", message: "Thiếu otp_id" });
   } else {
-    const _otp = await Otp.findOne({ otp_id: otp_id });
+    const _otp = await Otp.findOne({ otp_id: otp_id, code: req.body.code});
 
     if (!_otp) {
       return res
@@ -227,47 +233,59 @@ router.post("/internal/confirm", async function (req, res) {
             .status(400)
             .send({
               status_code: "INVALID_MONEY",
-              message: "Số tiền gửi vượt quá số dư tài khoản đang có",
+              message: "Gửi tiền thất bại vì số tiền gửi vượt quá số dư tài khoản đang có",
             });
         } else {
-          const accountReceive = await Account.findOne({
-            account_number: _otp.receiver_account_number,
-          });
-          let balance2 = accountReceive.balance;
+          
+            try{
+                const accountReceive = await Account.findOne({
+                  account_number: _otp.receiver_account_number,
+                });
+      
+                let balance2 = accountReceive.balance;
+      
+                const ret1 = await Account.findOneAndUpdate(
+                  {
+                    account_number: _otp.sender_account_number,
+                  },
+                  {
+                    balance: balance1 - _otp.money,
+                  }
+                );
+      
+                const ret2 = await Account.findOneAndUpdate(
+                  {
+                    account_number: _otp.receive_bank_code,
+                  },
+                  {
+                    balance: balance2 + _otp.money,
+                  }
+                );
+      
+                // Update Transaction Model
+                const _body1 = {
+                  sender_account_number: _otp.sender_account_number,
+                  receiver_account_number: _otp.receiver_account_number,
+                  sender_bank_code: _otp.sender_bank_code,
+                  receive_bank_code: _otp.receive_bank_code,
+                  money: _otp.money,
+                  transaction_fee: _otp.transaction_fee,
+                  type_fee: _otp.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
+                  message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
+                  created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
+                };
+      
+                let newTransaction = Transaction(_body1);
+                const ret3 = await newTransaction.save();
 
-          const ret1 = await Account.findOneAndUpdate(
-            {
-              account_number: _otp.sender_account_number,
-            },
-            {
-              balance: balance1 - _otp.money,
+                return res.status(200).send({ status: "TRANSFERD", message: "Cập nhật thành công." });
+            }catch(err){
+                
+              return res.status(500).send({ status: "ERROR", message: "Cập nhật thất bại." });
             }
-          );
+          
+          
 
-          const ret2 = await Account.findOneAndUpdate(
-            {
-              account_number: _otp.receive_bank_code,
-            },
-            {
-              balance: balance2 + _otp.money,
-            }
-          );
-
-          // Update Transaction Model
-          const _body1 = {
-            sender_account_number: _otp.sender_account_number,
-            receiver_account_number: _otp.receiver_account_number,
-            sender_bank_code: _otp.sender_bank_code,
-            receive_bank_code: _otp.receive_bank_code,
-            money: _otp.money,
-            transaction_fee: _otp.transaction_fee,
-            type_fee: _otp.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
-            message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
-            created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
-          };
-
-          let newTransaction = Transaction(_body1);
-          const ret3 = await newTransaction.save();
         }
       }
     }
@@ -275,11 +293,11 @@ router.post("/internal/confirm", async function (req, res) {
 });
 
 // Chuyển khoản liên ngân hàng
-// Người gửi nhập receiver_account_number
-router.post("/external", async function (req, res) {
+// Body gửi lên có receiver_account_number, receive_bank_code, money, message, type_fee
+router.post("/external/receiver_account_number", async function (req, res) {
   const { user_id } = req.tokenPayload;
 
-  //const _account = await Account.findOne({user_id: user_id});
+  const _account = await Account.findOne({user_id: user_id});
   const _user = await User.findOne({ user_id: user_id });
   const code = Math.floor(Math.random() * 999999) + 100000;
   let email = _user.email;
@@ -326,7 +344,7 @@ router.post("/external", async function (req, res) {
         email: email,
         code: code,
         time: time,
-        sender_account_number: req.body.sender_account_number,
+        sender_account_number: _account.account_number,
         receiver_account_number: req.body.receiver_account_number,
         sender_bank_code: "GO",
         receive_bank_code: req.body.receive_bank_code,
@@ -355,11 +373,11 @@ router.post("/external", async function (req, res) {
 });
 
 // Chuyển khoản liên ngân hàng
-// Người gửi gửi lên remind_name
-router.post("/external", async function (req, res) {
+// Body gửi lên có remind_name, receive_bank_code, money, message, type_fee
+router.post("/external/remind_name", async function (req, res) {
   const { user_id } = req.tokenPayload;
 
-  //const _account = await Account.findOne({user_id: user_id});
+  const _account = await Account.findOne({user_id: user_id});
   const _user = await User.findOne({ user_id: user_id });
   const code = Math.floor(Math.random() * 999999) + 100000;
   let email = _user.email;
@@ -408,7 +426,7 @@ router.post("/external", async function (req, res) {
         email: email,
         code: code,
         time: time,
-        sender_account_number: req.body.sender_account_number,
+        sender_account_number: _account.account_number,
         receiver_account_number: _receive.receiver_account_number,
         sender_bank_code: "GO",
         receive_bank_code: req.body.receive_bank_code,
@@ -438,10 +456,11 @@ router.post("/external", async function (req, res) {
 
 
 // Trong header có một trường là otp_id (chính là kết quả từ API phía trên)
-// Trong body có trường là otp (req.body.otp)
+// Trong body có trường là code (req.body.code)
 router.post("/external/confirm", async function (req, res) {
   const time = moment().valueOf();
   const { user_id } = req.tokenPayload;
+  
   const _otp_id = req.get("otp_id");
   const _email = req.get("email");
   const str = _email + "";
@@ -451,7 +470,7 @@ router.post("/external/confirm", async function (req, res) {
       .status(400)
       .send({ status_code: "NO_OTPID", message: "Thiếu otp_id" });
   } else {
-    const _otp = await Otp.findOne({ otp_id: otp_id });
+    const _otp = await Otp.findOne({ otp_id: otp_id , code: req.body.code});
 
     if (!_otp) {
       return res
@@ -494,16 +513,18 @@ router.post("/external/confirm", async function (req, res) {
           
           var DestinationAccountNumber = parseInt(_otp.receiver_account_number);
           var SourceAccountNumber = parseInt(_otp.sender_account_number);
+           
+          const _user = await User.findOne({user_id: user_id});
 
           const key = new NodeRSA(str);
           const t = moment().valueOf();
           const text = {
             BankName: "GO",
             DestinationAccountNumber: DestinationAccountNumber,     
-            SourceAccountName: "Nguyễn Minh Thông",
+            SourceAccountName: _user.fullname,
             SourceAccountNumber: SourceAccountNumber,
             Amount: _otp.money,
-            Message: "trả tiền mượn tháng ba",
+            Message: _otp.message,
             iat: t,
           };
           const encrypted = key.encrypt(text, "base64");
@@ -545,11 +566,11 @@ router.post("/external/confirm", async function (req, res) {
               let newTransaction = Transaction(_body1);
               const ret5 = await newTransaction.save();
 
-              return res.status(200).send({message: reply});
+              return res.status(200).send({status: "OK", message: reply});
               
             }).catch((error) => {
               const str_response = JSON.stringify(error.response.data);
-              return res.status(500).send({message: str_response});
+              return res.status(500).send({status: "ERROR", message: str_response});
             });
 
 
