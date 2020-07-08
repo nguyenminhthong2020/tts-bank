@@ -2,7 +2,7 @@
 /*
    a) Danh sách người dùng:
 
-   3 admin là thong, sy, tuan với pass là 123
+   1 admin là admin với pass là 123
    3 employee là nhanvien1, nhanvien2, nhanvien3
    8 user là user1, user2,...user8
    
@@ -64,7 +64,7 @@ app.get('/', (req, res) => {
   app.use('/auth', require('./routes/auth.route'));
 // // // Dành cho Admin hoặc Employee
 app.use('/account',  verify, require('./routes/account.route'));
-app.use('/user', require('./routes/user.route'));  
+app.use('/user', verify, require('./routes/user.route'));  
 
 app.use('/list-receiver', verify, require('./routes/listReceiver.route'));
 app.use('/list-receiver1', verify, require('./routes/listReceiver1.route'));
