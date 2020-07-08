@@ -22,6 +22,22 @@ router.get("/", async function (req, res) {
     return res.status(500).send(err.message);
   }
 });
+router.get("/:account_number", async function (req, res) {
+  const { user_id } = req.tokenPayload;
+  //const checkUser = await User.findOne({user_id: user_id});
+
+  // if(checkUser.role == 0){
+  //     res.status(400).send("Bạn không đủ thẩm quyền.");
+  // }
+  try {
+    const rows = await Account.findOne({ account_number: req.params.account_number });
+      return res.status(200).send({
+        rows
+      });
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+});
 
 /*Thêm mới 1 account - từ một user_id bên User
 + Cái này chỉ dành cho trong nội bộ
@@ -99,9 +115,9 @@ router.post("/edit", async function (req, res) {
         );
       
         if (ret) {
-          return res.status(500).send({ message: `Thành công.` });
+          return res.status(500).send({ status:"OK",ret });
         } else {
-          return res.status(500).send({ message: `Thất bại.` });
+          return res.status(500).send({ status: "FAIL" });
         }
     }
 
@@ -126,9 +142,9 @@ router.post("/edit", async function (req, res) {
       );
     
       if (ret) {
-        return res.status(500).send({ message: `Thành công.` });
+        return res.status(500).send({ status:"OK", ret });
       } else {
-        return res.status(500).send({ message: `Thất bại.` });
+        return res.status(500).send({ status: "FAIL" });
       }
 
     }
