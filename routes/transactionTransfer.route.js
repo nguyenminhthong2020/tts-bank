@@ -23,6 +23,7 @@ const router = express.Router();
   
 // })
 
+
 // Chuyển khoản nội bộ (cùng ngân hàng)
 // Body gửi lên có receiver_account_number, money, message, type_fee
 router.post("/internal/receiver_account_number", async function (req, res) {
@@ -235,6 +236,7 @@ router.post("/internal/confirm", async function (req, res) {
           account_number: _otp.sender_account_number,
         });
         let balance1 = accountSend.balance;
+        // let x = accountSend.balance - 3000;
         if (accountSend.balance < _otp.money) {
           return res
             .status(400)

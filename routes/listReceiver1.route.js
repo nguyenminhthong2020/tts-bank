@@ -7,6 +7,7 @@ const ListReceiver = require('../models/listReceiver.model');
 const router = express.Router();
 
 // Body gửi lên gồm có receiver_account_number, bank_code và remind_name (remind_name có thể rỗng)
+// và type (type là String, type = 1 => req.body.remind_name == "", type = 2 : có tên gợi nhớ)
 router.post("/", async function(req, res){
 
     const {user_id} = req.tokenPayload;
@@ -14,12 +15,13 @@ router.post("/", async function(req, res){
     try {
         const _account = await Account.findOne({account_number: req.body.receiver_account_number});
         if(_account){
-           if(req.body.remind_name == ""){
+           if(req.body.type == "1"){
                const _user = await User.findOne({user_id: _account.user_id});
                const newReceiver = {
                  user_id : user_id,
                  receiver_account_number : req.body.receiver_account_number,
-                 remind_name: _user.username
+                 remind_name: _user.fullname,
+                 bank_code : req.body.bank_code
                }
 
                let newList = ListReceiver(newReceiver);
@@ -31,7 +33,8 @@ router.post("/", async function(req, res){
              const newReceiver1 = {
                 user_id: user_id,
                 receiver_account_number : req.body.receiver_account_number,
-                remind_name: req.body.remind_name
+                remind_name: req.body.remind_name,
+                bank_code : req.body.bank_code
               }
 
               let newList1 = ListReceiver(newReceiver1);
@@ -42,7 +45,7 @@ router.post("/", async function(req, res){
            }
 
         }else{
-           req.status(500).send("Không tồn tại account để thêm vào list");
+           req.status(500).send({status: "NO_ACCOUNT", message: "Không tồn tại account để thêm vào list"});
         }
 
     }catch(err){
