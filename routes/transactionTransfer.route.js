@@ -563,14 +563,14 @@ router.post("/external/confirm", async function (req, res) {
             const t = moment().valueOf();
             const text = {
               BankName: "GO",
+              DestinationAccountNumber: DestinationAccountNumber,
               SourceAccountNumber: SourceAccountNumber,
               SourceAccountName: _user.fullname,
-              DestinationAccountNumber: DestinationAccountNumber,     
               Amount: _otp.money,
               Message: _otp.message,
               iat: t
             };
-
+           
             const encrypted = key.encrypt(text, "base64");
             const signature = key1.sign(text, 'base64');
             // console.log("\n"+encrypted);
