@@ -173,9 +173,11 @@ router.post("/", async function (req, res) {
          url: 'https://bank25.herokuapp.com/api/partner/account-bank/destination-account',
          data: reqBody
       }).then(async function (response) {
-         const str2 = JSON.stringify(response.data);
-         console.log(str2);
-         if(str2 == ""){
+        //  const str2 = JSON.stringify(response.data);
+        //  console.log(str2);
+        const strTest = response.data.TenKhachHang + "";
+
+         if(strTest == "undefined"){
             return res.status(400).send({ status: "NO_ACCOUNT", message: "Không tìm thấy người dùng." });
          }else{
             //return res.status(200).send({ status: "OK", fullname:  response.data.TenKhachHang});
