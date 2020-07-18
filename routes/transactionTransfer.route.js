@@ -572,7 +572,8 @@ router.post("/external/confirm", async function (req, res) {
             };
             const encrypted = key.encrypt(text, "base64");
             const signature = key1.sign(text, 'base64');
-  
+            console.log("\n"+encrypted);
+            console.log("\n"+signature);
             const url = "https://bank25.herokuapp.com/api/partner/account-bank/recharge";
    
             axios
@@ -583,7 +584,7 @@ router.post("/external/confirm", async function (req, res) {
                 },
               }).then(async (response) => {
                 let reply = response.data.reply;
-                
+                console.log("\n"+reply);
                 const ret4 = await Account.findOneAndUpdate(
                   {
                     account_number: _otp.sender_account_number,
@@ -605,7 +606,7 @@ router.post("/external/confirm", async function (req, res) {
                   message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
                   created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
                 };
-  
+                
                 let newTransaction = Transaction(_body1);
                 const ret5 = await newTransaction.save();
   
