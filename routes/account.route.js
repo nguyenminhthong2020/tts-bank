@@ -57,7 +57,8 @@ router.get("/:account_number", async function (req, res) {
       });
     }else{
       return res.status(200).send({
-        "status": "NO_ACCOUNT"
+        "status": "NO_ACCOUNT",
+        "fullname": ""
      });
     }
       
