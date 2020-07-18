@@ -191,7 +191,7 @@ router.post("/internal/remind_name", async function (req, res) {
 });
 
 
-// Trong header có 2 trường là otp_id, email (chính là kết quả từ API phía trên)
+// Trong header có 3 trường là x-access-token, otp_id, email (chính là kết quả từ API phía trên)
 // Trong body có trường là code (req.body.code)
 router.post("/internal/confirm", async function (req, res) {
   const time = moment().valueOf();
