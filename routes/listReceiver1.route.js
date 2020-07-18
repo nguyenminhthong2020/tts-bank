@@ -174,6 +174,7 @@ router.post("/", async function (req, res) {
          data: reqBody
       }).then(async function (response) {
          const str2 = JSON.stringify(response.data);
+         console.log(str2);
          if(str2 == ""){
             return res.status(400).send({ status: "NO_ACCOUNT", message: "Không tìm thấy người dùng." });
          }else{
