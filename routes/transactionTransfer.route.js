@@ -581,10 +581,10 @@ router.post("/external/confirm", async function (req, res) {
               'Encrypted': encrypted,
               'Signed': signature,
             }
-              
+            
             axios({
               method: 'post',
-              url: 'https://bank25.herokuapp.com/api/partner/account-bank/recharge',
+              url: 'https://bank25.herokuapp.com/api/partner/account-bank/destination-account/recharge',
               data: reqBody
             }).then(async function (response) {
                 //const str2 = JSON.stringify(response.data);
