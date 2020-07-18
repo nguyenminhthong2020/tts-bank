@@ -177,37 +177,36 @@ router.post("/", async function (req, res) {
          if(str2 == ""){
             return res.status(400).send({ status: "NO_ACCOUNT", message: "Không tìm thấy người dùng." });
          }else{
-            return res.status(200).send({ status: "OK", fullname:  response.data.TenKhachHang});
-         }
+            //return res.status(200).send({ status: "OK", fullname:  response.data.TenKhachHang});
 
          //return Response.Ok(res, {'bankName': response.data.TenKhachHang});
 
-           if (req.body.type == "1"){
-            const newReceiver4 = {
-              user_id: user_id,
-              receiver_account_number: req.body.receiver_account_number,
-              remind_name: response.data.TenKhachHang,
-              bank_code: req.body.bank_code,
-            };
-  
-            let newList4 = ListReceiver(newReceiver4);
-            const ret4 = await newList4.save();
-  
-            return res.status(201).send({ message: "thêm thành công" });
-           }else {
-            const newReceiver5 = {
-              user_id: user_id,
-              receiver_account_number: req.body.receiver_account_number,
-              remind_name: req.body.remind_name,
-              bank_code: req.body.bank_code,
-            };
-  
-            let newList5 = ListReceiver(newReceiver5);
-            const ret5 = await newList5.save();
-  
-            return res.status(201).send({ message: "thêm thành công" });
+            if (req.body.type == "1"){
+              const newReceiver4 = {
+                user_id: user_id,
+                receiver_account_number: req.body.receiver_account_number,
+                remind_name: response.data.TenKhachHang,
+                bank_code: req.body.bank_code,
+              };
+    
+              let newList4 = ListReceiver(newReceiver4);
+              const ret4 = await newList4.save();
+    
+              return res.status(201).send({ message: "thêm thành công" });
+            }else {
+              const newReceiver5 = {
+                user_id: user_id,
+                receiver_account_number: req.body.receiver_account_number,
+                remind_name: req.body.remind_name,
+                bank_code: req.body.bank_code,
+              };
+    
+              let newList5 = ListReceiver(newReceiver5);
+              const ret5 = await newList5.save();
+    
+              return res.status(201).send({ message: "thêm thành công" });
+            }
           }
-
          })
          .catch(function (err) {
             return res.status(500).send({ status: "ERROR", message: err.response.data});
