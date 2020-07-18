@@ -81,8 +81,8 @@ router.post("/internal/receiver_account_number", async function (req, res) {
         sender_bank_code: "GO",
         receive_bank_code: "GO",
         money: req.body.money,
-        transaction_fee: 0,
-        type_fee: req.body.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
+        transaction_fee: 3000,
+        type_fee: req.body.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Phí là 3000
         message: req.body.message
       };
       // let newOtp = Otp( _body);
@@ -167,8 +167,8 @@ router.post("/internal/remind_name", async function (req, res) {
         sender_bank_code: "GO",
         receive_bank_code: "GO",
         money: req.body.money,
-        transaction_fee: 0,
-        type_fee: req.body.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
+        transaction_fee: 3000,
+        type_fee: req.body.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Phí là 3000
         message: req.body.message
       };
       // let newOtp = Otp( _body);
@@ -235,17 +235,52 @@ router.post("/internal/confirm", async function (req, res) {
         const accountSend = await Account.findOne({
           account_number: _otp.sender_account_number,
         });
+
+
         let balance1 = accountSend.balance;
-        // let x = accountSend.balance - 3000;
-        if (accountSend.balance < _otp.money) {
-          return res
-            .status(400)
-            .send({
-              status_code: "INVALID_MONEY",
-              message: "Gửi tiền thất bại vì số tiền gửi vượt quá số dư tài khoản đang có",
-            });
-        } else {
+
+        if(_otp.type_fee == "1")  // người gửi trả
+        {
+            let _m = _otp.money + 3000;
+             if(accountSend.balance < _m)
+               {
+                return res
+                .status(400)
+                .send({
+                  status_code: "INVALID_MONEY",
+                  message: "Không thể gửi vì số dư không đủ."
+                });
+              }
+        }
+
+        if(_otp.type_fee == "0")   // người nhận trả
+        {
+             let _m1 = _otp.money - 3000;
+             if(_m1 < 0)
+               {
+                return res
+                .status(400)
+                .send({
+                  status_code: "INVALID_MONEY1",
+                  message: "Tiền gửi quá ít (dưới 3000 VND) cho hình thức Người nhận trả phí."
+                });
+              }
+        }
+
             try{
+                
+              let msend = 0;
+              let mreceive = 0;
+
+              if(_otp.type_fee == "1")
+              {
+                  msend = 3000;
+              }
+              if(_otp.type_fee == "0")
+              {
+                  mreceive = 3000;
+              }
+
                 const accountReceive = await Account.findOne({
                   account_number: _otp.receiver_account_number,
                 });
@@ -255,7 +290,7 @@ router.post("/internal/confirm", async function (req, res) {
                     account_number: _otp.sender_account_number,
                   },
                   {
-                    balance: balance1 - _otp.money,
+                    balance: balance1 - _otp.money - msend,
                   }
                 );
                 const ret2 = await Account.findOneAndUpdate(
@@ -263,7 +298,7 @@ router.post("/internal/confirm", async function (req, res) {
                     account_number: _otp.receiver_account_number,
                   },
                   {
-                    balance: balance2 + _otp.money,
+                    balance: balance2 + _otp.money - mreceive,
                   }
                 );
                 // Update Transaction Model
@@ -274,7 +309,7 @@ router.post("/internal/confirm", async function (req, res) {
                   receive_bank_code: _otp.receive_bank_code,
                   money: _otp.money,
                   transaction_fee: _otp.transaction_fee,
-                  type_fee: _otp.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. Thực ra phí là 0
+                  type_fee: _otp.type_fee, //*Chú ý là String. 1: người gửi trả, 0: người nhận trả. 
                   message: _otp.message, // Nội dung cần chuyển, Ví dụ: "gửi trả nợ cho ông A"
                   created_at: moment().format("YYYY-MM-DD HH:mm:ss").toString()
                 };
@@ -287,12 +322,13 @@ router.post("/internal/confirm", async function (req, res) {
             }
           
           
-
-        }
       }
     }
   }
 });
+
+// Tìm fullname từ receiver_account_number (với các đối tác)
+
 
 // Chuyển khoản liên ngân hàng
 // Body gửi lên có receiver_account_number, receive_bank_code, money, message, type_fee

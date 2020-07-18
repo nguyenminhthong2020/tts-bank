@@ -39,6 +39,7 @@ router.get("/all", async function (req, res) {
   }
 });
 
+// Tìm fullname từ account_number (trong nội bộ)
 router.get("/:account_number", async function (req, res) {
   const { user_id } = req.tokenPayload;
   //const checkUser = await User.findOne({user_id: user_id});
