@@ -573,9 +573,9 @@ router.post("/external/confirm", async function (req, res) {
 
             const encrypted = key.encrypt(text, "base64");
             const signature = key1.sign(text, 'base64');
-            console.log("\n"+encrypted);
-            console.log("\n"+signature);
-            const url = "https://bank25.herokuapp.com/api/partner/account-bank/recharge";
+            // console.log("\n"+encrypted);
+            // console.log("\n"+signature);
+            //const url = "https://bank25.herokuapp.com/api/partner/account-bank/recharge";
 
             let reqBody = {
               'Encrypted': encrypted,
