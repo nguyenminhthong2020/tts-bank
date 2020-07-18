@@ -213,8 +213,7 @@ router.post("/", async function (req, res) {
           }
          })
          .catch(function (err) {
-          return res.status(500).send({ status: err.response.status, message: err.response.data});
-            //return res.status(500).send({ status: "ERROR", message: err.response.data});
+            return res.status(500).send({ status: "ERROR", message: err.response.data});
 
          //console.log(err)
          //return console.log("\n"+JSON.stringify(err.response.data));

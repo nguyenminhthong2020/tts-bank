@@ -622,8 +622,11 @@ router.post("/external/confirm", async function (req, res) {
               })
               .catch(function (err) {
                 //  return res.status(500).send({ status: "ERROR", message: err.response.data});
-                const str_response = JSON.stringify(err.response.data);
-                return res.status(500).send({status: "ERROR", message: str_response});
+
+                // const str_response = JSON.stringify(err.response.data);
+                // return res.status(500).send({status: "ERROR", message: str_response});
+                console.log("\n"+"huhu, error roi" + "\n");
+                return res.status(500).send({ status: err.response.status, message: err.response.data});
               })
 
             // axios
