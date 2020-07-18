@@ -105,7 +105,7 @@ router.post('/create', async function(req, res){
 // Trường hợp 2 :  body gửi lên gồm có debtor_username
 // money, message
 // (đã có người nợ trong danh sách)
-router.post('/create', async function(req, res){
+router.post('/create2', async function(req, res){
   const { user_id } = req.tokenPayload;
   
   // tìm tài khoản người nợ
