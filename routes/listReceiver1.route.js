@@ -59,7 +59,7 @@ router.post('/partner/find', async function(req, res){
       method: 'get',
       url: 'https://bank25.herokuapp.com/api/partner/account-bank/destination-account',
       data: reqBody
-    }).then(function (response) {
+    }).then(async function (response) {
         const str2 = JSON.stringify(response.data);
         if(str2 == ""){
          return res.status(400).send({ status: "NO_ACCOUNT", message: "Không tìm thấy người dùng." });
@@ -172,7 +172,7 @@ router.post("/", async function (req, res) {
          method: 'get',
          url: 'https://bank25.herokuapp.com/api/partner/account-bank/destination-account',
          data: reqBody
-      }).then(function (response) {
+      }).then(async function (response) {
          const str2 = JSON.stringify(response.data);
          if(str2 == ""){
             return res.status(400).send({ status: "NO_ACCOUNT", message: "Không tìm thấy người dùng." });
