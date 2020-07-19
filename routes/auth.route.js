@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
  
   const _user = User.findOne({username : req.body.username});
 
-  res.json({
+  res.send({
     // authenticated: true,
     accessToken,
     refreshToken,
