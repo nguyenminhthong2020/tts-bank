@@ -59,11 +59,13 @@ router.post('/login', async (req, res) => {
 
   await updateRefreshToken(user_id, refreshToken);
  
+  const _user = User.findOne({username : req.body.username});
 
   res.json({
     // authenticated: true,
     accessToken,
-    refreshToken
+    refreshToken,
+    role : _user.role
   })
 })
 
