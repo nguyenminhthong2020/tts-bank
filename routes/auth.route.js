@@ -90,8 +90,10 @@ router.post('/refresh', async (req, res) => {
       throw createError(400, 'Invalid refresh token.');
     }
 
+    const _user = User.findOne({user_id : user_id});
+
     const accessToken = generateAccessToken(user_id);
-    res.json({ accessToken });
+    res.send({ accessToken, role: _user.role });
   })
 });
 
