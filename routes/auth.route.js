@@ -59,9 +59,9 @@ router.post('/login', async (req, res) => {
 
   await updateRefreshToken(user_id, refreshToken);
  
-  const _user = User.findOne({username : req.body.username});
+  const _user = await User.findOne({username : req.body.username});
 
-  res.send({
+  return res.status(200).send({
     // authenticated: true,
     accessToken,
     refreshToken,
@@ -90,10 +90,10 @@ router.post('/refresh', async (req, res) => {
       throw createError(400, 'Invalid refresh token.');
     }
 
-    const _user = User.findOne({user_id : user_id});
+    const _user = await User.findOne({user_id : user_id});
 
     const accessToken = generateAccessToken(user_id);
-    res.send({ accessToken, role: _user.role });
+    return res.status(200).send({ accessToken, role: _user.role });
   })
 });
 
