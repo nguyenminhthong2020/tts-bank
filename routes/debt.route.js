@@ -66,12 +66,14 @@ router.post('/create', async function(req, res){
          
         // creditor_account_number là chủ nợ, debtor_account_number là con nợ
         const x = await Account.findOne({user_id: user_id});
+        const _x = await User.findOne({user_id: user_id});
         
         const _userDebtor = await User.findOne({user_id: accountNum.user_id});
         
         const _body = {
             user_id: user_id,
             creditor_account_number: x.account_number,   // chủ nợ
+            creditor_fullname: _x.fullname,              // tên chủ nợ
             debtor_account_number: accountNum.account_number,     // người nợ   
             debtor_username: _userDebtor.username,  
             debtor_fullname: _userDebtor.fullname,
