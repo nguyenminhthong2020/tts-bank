@@ -199,11 +199,49 @@ router.post('/delete1/:debt_id', async function(req, res){
     });
     
     if(ret){
-        return res.status(200).send({
-          status: "OK",
-          debt_id: debt_id,
-          notify_message: req.body.notify_message        // Ví dụ : Tôi không có nợ ông nhé. Ông gửi nhầm rồi.
-      });
+         
+      
+        var transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "secondwebnc2020@gmail.com",
+            pass: "infymt6620",
+          },
+        });
+
+        var mainOptions = {
+          // thiết lập đối tượng, nội dung gửi mail
+          from: "secondwebnc2020@gmail.com",
+          to: email,
+          subject: "[Xác nhận OTP]",
+          text: "Tin nhắn từ ngân hàng Go ",
+          html: `<div>
+                        Xin chào ${fullname},
+                        <br><br>
+                        Vừa có một yêu cầu hủy nhắc nợ từ ${} với nội dung là :<br>
+                        ${req.body.notify_message}
+                        <br><br>
+                        Trân trọng
+                    </div>`,
+        };
+
+        
+  transporter.sendMail(mainOptions, function (error, info) {
+    if (error) {
+      res
+        .status(500)
+        .send({ status: "ERROR", message: "Không thể gửi message. " + error });
+    } else {
+      
+
+    } 
+  });
+
+      //   return res.status(200).send({
+      //     status: "OK",
+      //     debt_id: debt_id,
+      //     notify_message: req.body.notify_message        // Ví dụ : Tôi không có nợ ông nhé. Ông gửi nhầm rồi.
+      // });
     }
 
     }catch(err){
