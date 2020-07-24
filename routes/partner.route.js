@@ -254,7 +254,7 @@ router.post("/recharge", async function (req, res) {
       } else if(partnerCode == "partner34"){
 
         // partner PGP
-        const privateKeyArmored = process.ourkey.PGP_PRIVATEKEY;
+        const privateKeyArmored = process.ourkey.PGP_PRIVATEKEY2;
         const {
           keys: [privateKey],
         } = await openpgp.key.readArmored(privateKeyArmored);
