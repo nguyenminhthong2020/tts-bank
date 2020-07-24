@@ -581,7 +581,7 @@ router.post("/external/confirm", async function (req, res) {
            }
         
             axios.post('https://banking34.herokuapp.com/api/transfer/update', postBody, configAxios)
-            .then(function (response){
+            .then(async function (response){
 
               // let reply = response.data.reply;
               // console.log("\n"+reply);
