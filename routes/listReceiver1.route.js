@@ -1,6 +1,9 @@
 const express = require("express");
 const moment = require("moment");
 const md5 = require('md5');
+// const crypto = require('crypto');
+// const openpgp = require('openpgp');
+const sha256 = require('sha256');
 const axios = require('axios');
 const NodeRSA = require('node-rsa');
 const User = require("../models/user.model");
@@ -85,7 +88,33 @@ router.post('/partner/find', async function(req, res){
 // partner34 là nhóm PGP
 // body gửi lên có receiver_account_number
 router.post('/partner/find-pgp', async function(req, res){
-     
+  const ts = moment().valueOf();
+  const key = 'Infymt';
+  const sig = sha256(ts+key);
+  
+  axios.defaults.headers = {
+      'x-time': ts,
+      'x-signature': sig,
+      'x-partner-code': "GO"
+    };
+  
+  axios({
+      method: 'get',
+      url: 'https://banking34.herokuapp.com/api/user/${receiver_account_number}'
+    }).then(async function (response) {
+        //const str2 = JSON.stringify(response.data);
+        const strTest = response.data.fullname + "";
+        if(strTest == "undefined"){
+         return res.status(400).send({ status: "NO_ACCOUNT", message: "Không tìm thấy người dùng." });
+        }else{
+         return res.status(200).send({ status: "OK", fullname:  response.data.fullname});
+        }
+      })
+      .catch(function (err) {
+         console.log(err.response.data);
+        //return console.log("\n"+JSON.stringify(err.response.data));
+        //return Response.SendMessaageRes(res.status(err.response.status), JSON.stringify(err.response.data))
+      })
     
 })
 
