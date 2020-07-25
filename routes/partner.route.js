@@ -202,11 +202,11 @@ router.post("/recharge", async function (req, res) {
     }
 
     try {
-      const userAccount = await Account.findOne({account_number: req.body.receive_account_number});
+      const userAccount = await Account.findOne({account_number: req.body.receiver_account_number});
 
       if (!userAccount) {
         return res.status(404).send({
-            message: `Không tìm thấy user có account number ${req.body.receive_account_number}`,
+            message: `Không tìm thấy user có account number ${req.body.receiver_account_number}`,
           });
       }
 
@@ -220,7 +220,7 @@ router.post("/recharge", async function (req, res) {
       let newMoney = userAccount.balance + money;
       await Account.findOneAndUpdate(
           {
-              account_number: req.body.receive_account_number
+              account_number: req.body.receiver_account_number
           },
           {
               balance: newMoney
@@ -233,7 +233,7 @@ router.post("/recharge", async function (req, res) {
       
       const entityUpdateLog = {
           sender_account_number: req.body.sender_account_number,
-          receiver_account_number: req.body.receive_account_number,
+          receiver_account_number: req.body.receiver_account_number,
           sender_bank_code: paCode,
           receive_bank_code: config.auth.bankcode,  // "GO"    
           money: money1,
@@ -246,7 +246,7 @@ router.post("/recharge", async function (req, res) {
 
       // response về cho ngân hàng B :
       const responseForClient = {
-        receive_account_number: req.body.receive_account_number,
+        receiver_account_number: req.body.receiver_account_number,
         money: req.body.money,
         currentTime: moment().valueOf(),
       };
