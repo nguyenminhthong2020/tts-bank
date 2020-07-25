@@ -149,8 +149,17 @@ router.post("/recharge", async function (req, res) {
     if(partnerCode == "partner34"){
       partner = process.partnerPGP2;
     }
-    const keyPublic = new NodeRSA(partner.RSA_PUBLICKEY);
-    const veri = keyPublic.verify(
+    const keyPublic2 = new NodeRSA(`-----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlgYOdnw1EBNhzIiKP3Ep
+    ieY2sOhHhUYAdTKn7/kXX0DXdEdWU4Jnkkv6F8dtLhkGn6wL/tMsPuuLlms3ntoO
+    OfPyq3YCD6gpnVb2ns7058dI83AQMPEq8KLlf2JHbxOHIgdnhi8HF/q9D48eJR3m
+    V1BEOHzNpjN/URZ/1cF7x/FEAls5esotYle3NDeP31qIxGT/QSbEknBFwrDY73yj
+    BqRp/2nJ1ns6Nz2YFxlT/W8PLaq9g5rOh3HGg7bO8IuK8RubQqnSSEFOVShvNzmb
+    Q9G9IqqMyggY21r0Ft3e6WyntluVxIzVd8KkY9Gni/vWYC3MXTiGDLG0ABYnT44s
+    HwIDAQAB
+    -----END PUBLIC KEY-----`);
+    //const keyPublic = new NodeRSA(partner.RSA_PUBLICKEY);
+    const veri = keyPublic2.verify(
       JSON.stringify(req.body),
       signature,
       "base64",
