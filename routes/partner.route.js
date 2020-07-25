@@ -167,7 +167,7 @@ router.post("/recharge", async function (req, res) {
       "base64",
       "base64"
     );
-    console.log("\n check 3: " + verify);
+    console.log("\n check 3: " + veri);
     var con = confirm(req, 2);
 
     if (con == 1) {
@@ -193,7 +193,7 @@ router.post("/recharge", async function (req, res) {
         message: "Thiếu sender_account_number hoặc receiver_account_number hoặc type_fee",
       });
     }
-    console.log("\nverify: " + vefiry+"\n");
+    console.log("\nverify: " + vefi+"\n");
     if (veri != true) {
       return res.status(400).send({
         message: "Sai chữ ký.",
