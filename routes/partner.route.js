@@ -165,7 +165,7 @@ router.post("/recharge", async function (req, res) {
     const veri = keyPublic2.verify(
       JSON.stringify(req.body), 
       signature,
-      "uft8",
+      "utf8",
       "base64"
     );
     console.log("\n check 3: " + veri);
