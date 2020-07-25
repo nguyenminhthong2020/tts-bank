@@ -193,7 +193,7 @@ router.post("/recharge", async function (req, res) {
         message: "Thiếu sender_account_number hoặc receiver_account_number hoặc type_fee",
       });
     }
-    console.log("\nverify: " + vefi+"\n");
+    console.log("\nverify: " + veri+"\n");
     if (veri != true) {
       return res.status(400).send({
         message: "Sai chữ ký.",
