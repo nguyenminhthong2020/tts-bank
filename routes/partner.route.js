@@ -134,7 +134,7 @@ router.post("/recharge", async function (req, res) {
     const partnerCode = req.get("partnerCode");
     const signature = req.get("signature"); 
     const paCode = req.get("partnerCode");
-
+    console.log("\n check 1: " + partnerCode);
     // Kiểm tra ngân hàng liên kết là RSA/ PGP hay ForTest để lấy keyPulic
     let partner;
     if (partnerCode == config.auth.partnerRSA) {
@@ -158,6 +158,7 @@ router.post("/recharge", async function (req, res) {
     Q9G9IqqMyggY21r0Ft3e6WyntluVxIzVd8KkY9Gni/vWYC3MXTiGDLG0ABYnT44s
     HwIDAQAB
     -----END PUBLIC KEY-----`;
+    console.log("\n check 2: " + strTestKey);
     const keyPublic2 = new NodeRSA(strTestKey);
     //const keyPublic = new NodeRSA(partner.RSA_PUBLICKEY);
     const veri = keyPublic2.verify(
@@ -166,7 +167,7 @@ router.post("/recharge", async function (req, res) {
       "base64",
       "base64"
     );
-    
+    console.log("\n check 3: " + verify);
     var con = confirm(req, 2);
 
     if (con == 1) {
