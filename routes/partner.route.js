@@ -132,7 +132,12 @@ router.post("/check", async (req, res) => {
 // sender_account_number, receiver_account_number, money, type_fee, message 
 router.post("/recharge", async function (req, res) {
     const partnerCode = req.get("partnerCode");
-    const signature = req.get("signature"); 
+    //const signature = req.get("signature"); 
+    const signature = `bNTw6wpY/N3GGzJe5DbxIs8Lo/euSJXyL78UhgafFqU87qTlJji8y3d2Qb8sZ3IzpDvs8hYLPo0c7vAD
+    P0egQWEgc35m7zJkHZIXujFyPP97UmuIUfyS8FlESNK3dcV59sJcrkdjzX3fvJnLQI0ylpNHcM23wAqG
+    uy6TS/Qxo8iyVrxYXYFQ4XTVMSRbfJ4wfljPXExzWCvNGGo4x9omTvzyhYdIdLVfZ0VVK623du/Pz+hM
+    N0njAGVySJU53K8LzRY3/6TVkqEXp6N/CodiZPhk0EA6wxhNLFCShIfFmHLziGgkbwbe1VtMUNtek/y7
+    06gDoFBsuVhceZ95jlMosg==`;
     const paCode = req.get("partnerCode");
     console.log("\n check 1: " + partnerCode);
     // Kiểm tra ngân hàng liên kết là RSA/ PGP hay ForTest để lấy keyPulic
