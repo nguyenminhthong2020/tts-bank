@@ -168,6 +168,15 @@ router.post("/recharge", async function (req, res) {
       "utf8",
       "base64"
     );
+    
+    if(partnerCode == "partner34"){
+      veri =  keyPublic2.verify(
+        JSON.stringify(req.body), 
+        signature,
+        "base64",
+        "base64"
+      );
+    }
     console.log("\n check 3: " + veri);
     var con = confirm(req, 2);
 
