@@ -288,7 +288,7 @@ router.post('/admin2', async function(req, res){
             });
             
             if (allTran1) {
-                const allTranResult1 = allTran.filter(x => (((x.sender_bank_code == _bank_code) || (x.sender_bank_code == _bank_code)) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
+                const allTranResult1 = allTran1.filter(x => (((x.sender_bank_code == _bank_code) || (x.sender_bank_code == _bank_code)) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
                 
                 let money1 = 0;
 
