@@ -70,7 +70,7 @@ router.get('/debt', async function(req, res){
 /* Phân hệ Employee */
 //Xem lịch sử Giao dịch nhận tiền
 // body gửi lên có account_number (của khách)
-router.get('/receive', async function(req, res){
+router.get('/employee/receive', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
@@ -90,7 +90,7 @@ router.get('/receive', async function(req, res){
 
 //Xem lịch sử Giao dịch chuyển khoản
 // body gửi lên có account_number (của khách)
-router.get('/send', async function(req, res){
+router.get('/employee/send', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
@@ -110,7 +110,7 @@ router.get('/send', async function(req, res){
 
 //Xem lịch sử Giao dịch thanh toán nhắc nợ
 // body gửi lên có account_number (của khách)
-router.get('/debt', async function(req, res){
+router.get('/employee/debt', async function(req, res){
     const { user_id } = req.tokenPayload;
     const checkUser = await User.findOne({ user_id: user_id });
     if (checkUser.role == 0) {
