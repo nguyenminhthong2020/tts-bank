@@ -216,5 +216,104 @@ router.post('/admin', async function(req, res){
 
 
 });
+router.post('/admin2', async function(req, res){
+    const { user_id } = req.tokenPayload;
+    const checkUser = await User.findOne({ user_id: user_id });
+    if (checkUser.role < 2) {
+      return res.status(400).send({message:"Bạn không đủ thẩm quyền."});
+    }
+    
+    if(req.body.bank_code === "All")
+    {
+        const startDate = req.body.start;
+        const endDate = req.body.end;
+        
+        // var data = [];
+        // Transaction.find({
+        // }).exec(function (err, trans) {
+        //     if (err) {
+        //         return res.status(500).json({
+        //                         message: "Không thể truy vấn"
+        //                     });
+
+        //     } else {
+        //         for(let i = 0; i < trans.length; i++)
+        //         if((trans[i].sender_bank_code != trans[i].receive_bank_code) && (moment(trans[i].created_at) >= startDate) && (moment(trans[i].created_at) <= endDate))
+        //         {
+        //                data.push(trans[i]);
+        //         };
+                 
+        //     }
+
+        try{
+            
+            let allTran = await Transaction.find({
+            });
+            
+            if (allTran) {
+                const allTranResult = allTran.filter(x => ((x.sender_bank_code != x.receive_bank_code) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
+                let money = 0;
+
+                for (let i = 0; i < allTranResult.length; i++)
+                {
+                    money += allTranResult[i].money;
+                }
+
+                return res.status(200).send({
+                    status: "OK",
+                    money : money,
+                    data: allTranResult
+                })
+            }else{
+                return res.status(400).json({
+                    message: "Không thể truy vấn"
+                })
+            }
+
+        }catch(err){
+            return res.status(500).send(err.message);
+        }
+
+    
+
+    }else{
+        
+        const startDate = req.body.start;
+        const endDate = req.body.end;
+        const _bank_code = req.body.bank_code;
+
+        try{
+            
+            let allTran1 = await Transaction.find({
+            });
+            
+            if (allTran1) {
+                const allTranResult1 = allTran.filter(x => (((x.sender_bank_code == _bank_code) || (x.sender_bank_code == _bank_code)) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
+                
+                let money1 = 0;
+
+                for (let i = 0; i < allTranResult1.length; i++)
+                {
+                    money1 += allTranResult1[i].money;
+                }
+
+                return res.status(200).send({
+                    money: money1,
+                    status: "OK",
+                    data: allTranResult1
+                })
+            }else{
+                return res.status(400).json({
+                    message: "Không thể truy vấn"
+                })
+            }
+
+        }catch(err){
+            return res.status(500).send(err.message);
+        }
+    }
+
+
+});
 
 module.exports = router;
