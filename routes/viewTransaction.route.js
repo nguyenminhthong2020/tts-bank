@@ -288,8 +288,8 @@ router.post('/admin2', async function(req, res){
 
     }else{
         
-        const startDate1 = req.body.start;
-        const endDate1 = req.body.end;
+        const startDate1 = moment(req.body.start);
+        const endDate1 = moment(req.body.end);
         const _bank_code = req.body.bank_code;
 
         try{
