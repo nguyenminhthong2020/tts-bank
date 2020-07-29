@@ -100,7 +100,7 @@ router.post('/partner/find-pgp', async function(req, res){
   
   axios({
       method: 'get',
-      url: 'https://banking34.herokuapp.com/api/user/${req.body.receiver_account_number}'
+      url: `https://banking34.herokuapp.com/api/user/${req.body.receiver_account_number}`
     }).then(async function (response) {
         //const str2 = JSON.stringify(response.data);
         const strTest = response.data.fullname + "";
@@ -279,7 +279,7 @@ router.post("/", async function (req, res) {
 
       axios({
         method: 'get',
-        url: 'https://banking34.herokuapp.com/api/user/${req.body.receiver_account_number}'
+        url: `https://banking34.herokuapp.com/api/user/${req.body.receiver_account_number}`
       }).then(async function (response) {
         //  const str2 = JSON.stringify(response.data);
         //  console.log(str2);
