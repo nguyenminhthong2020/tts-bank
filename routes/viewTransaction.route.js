@@ -140,8 +140,8 @@ router.post('/admin', async function(req, res){
     
     if(req.body.bank_code === "All")
     {
-        const startDate = req.body.start;
-        const endDate = req.body.end;
+        const startDate = moment(req.body.start);
+        const endDate = moment(req.body.end);
 
         try{
             
@@ -225,8 +225,8 @@ router.post('/admin2', async function(req, res){
     
     if(req.body.bank_code === "All")
     {
-        const startDate = req.body.start;
-        const endDate = req.body.end;
+        const startDate = moment(req.body.start);
+        const endDate = moment(req.body.end);
         
         // var data = [];
         // Transaction.find({
@@ -259,7 +259,7 @@ router.post('/admin2', async function(req, res){
                 //console.log("\n");
                 let money = 0;
                 var data = [];
-
+                
                 for (let i = 0; i < allTran.length; i++)
                 {
                     if((allTran[i].sender_bank_code != allTran[i].receive_bank_code) && (moment(allTran[i].created_at) >= startDate) && (moment(allTran[i].created_at) <= endDate))
@@ -288,8 +288,8 @@ router.post('/admin2', async function(req, res){
 
     }else{
         
-        const startDate = req.body.start;
-        const endDate = req.body.end;
+        const startDate1 = req.body.start;
+        const endDate1 = req.body.end;
         const _bank_code = req.body.bank_code;
 
         try{
@@ -305,7 +305,7 @@ router.post('/admin2', async function(req, res){
 
                 for (let i = 0; i < allTran1.length; i++)
                 {
-                    if(((allTran1[i].sender_bank_code == _bank_code) || (allTran1[i].sender_bank_code == _bank_code)) && (moment(allTran1[i].created_at) >= startDate) && (moment(allTran1[i].created_at) <= endDate)){
+                    if(((allTran1[i].sender_bank_code == _bank_code) || (allTran1[i].sender_bank_code == _bank_code)) && (moment(allTran1[i].created_at) >= startDate1) && (moment(allTran1[i].created_at) <= endDate1)){
                         
                         money1 += allTran1[i].money;
                         data1.push(allTran1[i]);
