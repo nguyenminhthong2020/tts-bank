@@ -251,8 +251,10 @@ router.post('/admin2', async function(req, res){
             });
             
             if (allTran) {
-                const allTranResult = allTran.filter(x => ((x.sender_bank_code != x.receive_bank_code) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
                 console.log("\n");
+                console.log(allTran);
+                console.log("\n");
+                const allTranResult = allTran.filter(x => ((x.sender_bank_code != x.receive_bank_code) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
                 console.log(allTranResult);
                 console.log("\n");
                 let money = 0;
