@@ -251,23 +251,28 @@ router.post('/admin2', async function(req, res){
             });
             
             if (allTran) {
-                console.log("\n");
-                console.log(allTran);
-                console.log("\n");
-                const allTranResult = allTran.filter(x => ((x.sender_bank_code != x.receive_bank_code) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
-                console.log(allTranResult);
-                console.log("\n");
+                //console.log("\n");
+                //console.log(allTran);
+                //console.log("\n");
+                //const allTranResult = allTran.filter(x => ((x.sender_bank_code != x.receive_bank_code) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
+                //console.log(allTranResult);
+                //console.log("\n");
                 let money = 0;
+                var data = [];
 
-                for (let i = 0; i < allTranResult.length; i++)
+                for (let i = 0; i < allTran.length; i++)
                 {
-                    money += allTranResult[i].money;
+                    if((allTran[i].sender_bank_code != allTran[i].receive_bank_code) && (moment(allTran[i].created_at) >= startDate) && (moment(allTran[i].created_at) <= endDate))
+                    {
+                        money += allTran[i].money;
+                        data.push(allTran[i]);
+                    }
                 }
 
                 return res.status(200).send({
                     status: "OK",
                     money : money,
-                    data: allTranResult
+                    data: data
                 })
             }else{
                 return res.status(400).json({
@@ -293,19 +298,24 @@ router.post('/admin2', async function(req, res){
             });
             
             if (allTran1) {
-                const allTranResult1 = allTran1.filter(x => (((x.sender_bank_code == _bank_code) || (x.sender_bank_code == _bank_code)) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
+                //const allTranResult1 = allTran1.filter(x => (((x.sender_bank_code == _bank_code) || (x.sender_bank_code == _bank_code)) && (moment(x.created_at) >= startDate) && (moment(x.created_at) <= endDate)));
                 
                 let money1 = 0;
+                var data1 = [];
 
-                for (let i = 0; i < allTranResult1.length; i++)
+                for (let i = 0; i < allTran1.length; i++)
                 {
-                    money1 += allTranResult1[i].money;
+                    if(((allTran1[i].sender_bank_code == _bank_code) || (allTran1[i].sender_bank_code == _bank_code)) && (moment(allTran1[i].created_at) >= startDate) && (moment(allTran1[i].created_at) <= endDate)){
+                        
+                        money1 += allTran1[i].money;
+                        data1.push(allTran1[i]);
+                    }
                 }
 
                 return res.status(200).send({
                     money: money1,
                     status: "OK",
-                    data: allTranResult1
+                    data: data1
                 })
             }else{
                 return res.status(400).json({
