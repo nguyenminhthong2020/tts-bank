@@ -224,7 +224,7 @@ router.post("/delete1/:debt_id", async function (req, res) {
         // thiết lập đối tượng, nội dung gửi mail
         from: "secondwebnc2020@gmail.com",
         to: emailSecond,
-        subject: "[Xác nhận OTP]",
+        subject: "[Hủy nhắc nợ]",
         text: "Tin nhắn từ ngân hàng Go ",
         html: `<div>
                         Xin chào ${ret.creditor_fullname},
@@ -292,7 +292,7 @@ router.post("/delete2/:debt_id", async function (req, res) {
         // thiết lập đối tượng, nội dung gửi mail
         from: "secondwebnc2020@gmail.com",
         to: emailSecond,
-        subject: "[Xác nhận OTP]",
+        subject: "[Hủy nhắc nợ]",
         text: "Tin nhắn từ ngân hàng Go ",
         html: `<div>
                         Xin chào ${ret.creditor_fullname},
