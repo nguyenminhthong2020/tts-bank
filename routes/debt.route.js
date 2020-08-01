@@ -295,9 +295,9 @@ router.post("/delete2/:debt_id", async function (req, res) {
         subject: "[Hủy nhắc nợ]",
         text: "Tin nhắn từ ngân hàng Go ",
         html: `<div>
-                        Xin chào ${ret.creditor_fullname},
+                        Xin chào ${_userSecond.fullname},
                         <br><br>
-                        Vừa có một yêu cầu hủy nhắc nợ từ ${ret.debtor_fullname} với nội dung là :<br>
+                        Vừa có một yêu cầu hủy nhắc nợ từ ${ret.creditor_fullname} với nội dung là :<br>
                         ${req.body.notify_message}
                         <br><br>
                         Trân trọng
