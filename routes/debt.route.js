@@ -9,7 +9,7 @@ const ListDebt = require("../models/listDebt.model");
 const { message } = require("openpgp");
 // const Otp = require("../models/otp.model");
 // const Transaction = require("../models/TransactionHistory.model");
-// var nodemailer = require("nodemailer");
+var nodemailer = require("nodemailer");
 // const config = require("../config/default.json");
 // const process1 = require("../config/process.config");
 
