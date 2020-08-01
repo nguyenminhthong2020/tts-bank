@@ -274,8 +274,8 @@ router.post("/delete2/:debt_id", async function (req, res) {
     );
 
     
-      //const _accountSecond = await Account.findOne({account_number: ret.creditor_account_number});
-      const _userSecond = await User.findOne({user_id: ret.user_id});
+      const _accountSecond = await Account.findOne({account_number: ret.debtor_account_numberr});
+      const _userSecond = await User.findOne({user_id: _accountSecond.user_id});
       const emailSecond = _userSecond.email;
       //const fullnameSecond = _userSecond.fullname;
       //const fullname = ret.debtor_fullname;
