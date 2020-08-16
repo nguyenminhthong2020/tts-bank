@@ -303,7 +303,7 @@ router.post("/delete2/:debt_id", async function (req, res) {
         }
       );
           
-          // Gửi = giao diện client màn hình notify
+          // Gửi bằng giao diện client màn hình notify 
           const _body1 = {
             sender_account_number: ret.creditor_account_number,  
             sender_fullname : ret.creditor_fullname, 
