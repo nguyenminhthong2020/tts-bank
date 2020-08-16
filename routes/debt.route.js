@@ -226,12 +226,12 @@ router.post("/delete1/:debt_id", async function (req, res) {
           created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
       } 
       let newNoti = Notify( _body1);
-      const ret = await newNoti.save();
+      const ret1 = await newNoti.save();
 
       return res.status(200).send({
         status: "OK",
         message: "Đã xóa",
-        notify_id : ret.notify_id
+        notify_id : ret1.notify_id
     });
 
     }catch(err){
@@ -313,12 +313,12 @@ router.post("/delete2/:debt_id", async function (req, res) {
             created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
         } 
         let newNoti = Notify( _body1);
-        const ret = await newNoti.save();
+        const ret1 = await newNoti.save();
 
         return res.status(200).send({
           status: "OK",
           message: "Đã xóa",
-          notify_id : ret.notify_id
+          notify_id : ret1.notify_id
       });
 
     }catch{err}{
