@@ -211,6 +211,7 @@ router.post("/", async function (req, res) {
                   receiver_account_number: updateListDebt.creditor_account_number,
                   receiver_fullname: updateListDebt.creditor_fullname,
                   message: "Đã thanh toán nợ",  
+                  notify_type : "1",
                   created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
               } 
               let newNoti = Notify( _body3);
