@@ -214,12 +214,12 @@ router.post("/", async function (req, res) {
                   created_at : moment().format('YYYY-MM-DD HH:mm:ss').toString()
               } 
               let newNoti = Notify( _body3);
-              const ret3 = await newNoti.save();
+              const ret7 = await newNoti.save();
 
               return res.status(200).send({
                 status: "DONE",
                 message: "Đã thanh toán",
-                notify_id : ret3.notify_id
+                notify_id : ret7.notify_id
             });
 
               // Gửi mail notify cho người nhắc :
