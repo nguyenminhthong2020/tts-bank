@@ -78,7 +78,7 @@ router.post("/setview-id/:id", async function (req, res) {
   });
   router.post("/setview-all/", async function (req, res) {
     const { user_id } = req.tokenPayload;
-    //const _account  = await Account.findOne({user_id: user_id});
+    const _account  = await Account.findOne({user_id: user_id});
     //const checkUser = await User.findOne({user_id: user_id});
    
     // if(checkUser.role == 0){
@@ -86,7 +86,7 @@ router.post("/setview-id/:id", async function (req, res) {
     // }
     try {
                                                  // chưa xem ---> đã xem
-      const rows = await Notify2.updateMany({is_view : "0"},{$set:{is_view: "1"}});     
+      const rows = await Notify2.updateMany({is_view : "0", receiver_account_number : _account.account_number},{$set:{is_view: "1"}});     
       return res.status(200).send({
           rows
         });
